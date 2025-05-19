@@ -1,1 +1,6 @@
 @import "tailwindcss";
+
+@theme {
+  --color-btn-cadastro: #844FC2;
+  --color-btn-yellow: #FDBA46;
+}
