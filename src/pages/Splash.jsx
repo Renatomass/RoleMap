@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import mapa from "../assets/map.png";
-import logo from "../assets/LOGOOO.svg";
+import logo from "../assets/LOGO.svg";
 
 export default function Splash() {
   return (
@@ -24,7 +24,7 @@ export default function Splash() {
           </p>
 
           <Link to="/home">
-            <button className="bg-[#54DDCD] drop-shadow-xl text-[#ffffff] font-bold px-8 py-3 rounded-lg hover:scale-105 transition-all">
+            <button className=" bg-teal-300 hover:bg-teal-400 drop-shadow-xl text-[#ffffff] font-bold px-8 py-3 rounded-lg cursor-pointer hover:scale-105 hover:bg-[] transition-all">
               Encontre o rolê perfeito
             </button>
           </Link>
