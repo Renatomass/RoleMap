@@ -1,9 +1,14 @@
-// src/components/HomeScreen.jsx
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import bgImage from '../assets/bg.png';
 import logo from '../assets/LOGO.svg';
 
 export default function HomeScreen() {
+  const navigate = useNavigate();
+
+  const handleEntrar = () => {
+    navigate(`/sala/:codigo`);
+  };
   return (
     <div
       className="flex flex-col items-center justify-center h-screen relative bg-cover bg-center text-white"
@@ -22,7 +27,9 @@ export default function HomeScreen() {
         <button className="bg-yellow-400 text-white font-bold py-3 rounded-xl hover:opacity-90 transition">
           Criar Rolê
         </button>
-        <button className="bg-teal-400 text-white font-bold py-3 rounded-xl hover:opacity-90 transition">
+        <button
+          className="bg-teal-400 text-white font-bold py-3 rounded-xl hover:opacity-90 transition"
+          onClick={handleEntrar}>
           Entrar com Código
         </button>
       </div>
