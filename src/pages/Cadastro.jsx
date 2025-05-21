@@ -63,7 +63,7 @@ export default function Cadastro() {
           <div className="text-center text-sm font-semibold text-gray-500">OU</div>
           <button
             type="button"
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/home')}
             className="bg-[#8338ec] text-white font-bold py-3 rounded-full hover:opacity-90 transition">
             Já tem conta? Voltar
           </button>
