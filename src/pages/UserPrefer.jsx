@@ -1,4 +1,4 @@
-export default function Preferencias() {
+export default function UserPrefer() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-blue-500 text-white text-2xl">
       funcionando!

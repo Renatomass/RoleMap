@@ -33,7 +33,7 @@ export default function Home() {
           placeholder="Senha"
         ></input>
 
-        <Link to="/Criar">
+        <Link to="/UserSala">
           <button
             className="w-full p-2 bg-teal-300 hover:bg-teal-400 text-white font-[Poppins] font-bold mt-3 rounded-2xl text-lg cursor-pointer"
             type="button"
