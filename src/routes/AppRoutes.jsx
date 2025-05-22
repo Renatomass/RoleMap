@@ -13,7 +13,7 @@ export default function AppRoutes(){
                 <Route path="/" element={<Splash/>}/>
                 <Route path="/home" element={<Home />}/>
                 <Route path="/UserSala" element={<UserSala />}/>
-                <Route path="/preferencias" element={<UserPrefer />}/>
+                <Route path="/userprefer" element={<UserPrefer/>}/>
                 <Route path="/rolecriado" element={<SalaCriada />}/>
                 <Route path="/sala/:codigo" element={<EntrarSala />}/>
                 <Route path="/final" element={<Final />}/>
