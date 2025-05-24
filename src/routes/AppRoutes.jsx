@@ -7,6 +7,7 @@ import Home from "../pages/Home";
 import Preferencias from "../pages/Preferencias";
 import Resultado from "../pages/Resultado";
 import Splash from "../pages/Splash";
+import Cadastro from "../pages/Cadastro";
 import Apresentacao from "../pages/Apresentacao";
 
 export default function AppRoutes(){
@@ -15,6 +16,7 @@ export default function AppRoutes(){
                 <Route path="/" element={<Splash/>}/>
                 <Route path="/apresentacao" element={<Apresentacao/>}/>
                 <Route path="/home" element={<Home />}/>
+                <Route path="/Cadastro" element={<Cadastro />} />
                 <Route path="/criar" element={<CriarSala />}/>
                 <Route path="/sala/:codigo" element={<EntrarSala />}/>
                 <Route path="/preferencias" element={<Preferencias />}/>
