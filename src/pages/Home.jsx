@@ -1,9 +1,7 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import logo from "../assets/LOGO.svg";
 
 export default function Home() {
-  const navigate = useNavigate();
-
   return (
     <div className="min-h-screen bg-[#493971] text-white text-2xl justify-items-center font-[Poppins] pt-[5%]">
       <div className="flex left-1/2">
@@ -34,7 +32,7 @@ export default function Home() {
           type="password"
           placeholder="Senha"/>
 
-        <Link to="/Criar">
+        <Link to="/CriarSala">
           <button
             className="w-full p-2 bg-teal-300 hover:bg-teal-400 text-white font-[Poppins] font-bold mt-3 rounded-2xl text-lg cursor-pointer"
             type="button">

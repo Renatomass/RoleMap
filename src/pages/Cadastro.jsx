@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/LOGO.svg';
-import bgImage from '../assets/bg.png';
+import bg from '../assets/bg.svg'
 
 export default function Cadastro() {
   const navigate = useNavigate();
@@ -19,8 +19,7 @@ export default function Cadastro() {
 
   return (
     <div
-      className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center px-4 relative"
-      style={{ backgroundImage: `url(${bgImage})` }}
+      className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center px-4 relative" style={{ backgroundImage: `url(${bg})` }}
     >
       <div className="flex items-center gap-3 mb-6">
         <img src={logo} alt="Rolê Map" className="w-16 h-16" />

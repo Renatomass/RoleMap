@@ -17,7 +17,7 @@ export default function AppRoutes(){
                 <Route path="/apresentacao" element={<Apresentacao/>}/>
                 <Route path="/home" element={<Home />}/>
                 <Route path="/Cadastro" element={<Cadastro />} />
-                <Route path="/criar" element={<CriarSala />}/>
+                <Route path="/criarSala" element={<CriarSala />}/>
                 <Route path="/sala/:codigo" element={<EntrarSala />}/>
                 <Route path="/preferencias" element={<Preferencias />}/>
                 <Route path="/esperando" element={<Esperando />}/>
