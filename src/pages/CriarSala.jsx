@@ -43,5 +43,6 @@ export default function HomeScreen() {
           </button>
         </Link>
     </div>
+    </div>
   );
 }
