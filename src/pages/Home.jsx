@@ -3,7 +3,7 @@ import logo from "../assets/LOGO.svg";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-purple-600 text-white text-2xl justify-items-center font-[Poppins] pt-[5%]">
+    <div className="min-h-screen bg-[#493971] text-white text-2xl justify-items-center font-[Poppins] pt-[5%]">
       <div className="flex left-1/2">
         <div className="flex text-left text-white max-w-md bottom-[550px] p-20px">
           <img src={logo} alt="Logo App" className="w-25" />

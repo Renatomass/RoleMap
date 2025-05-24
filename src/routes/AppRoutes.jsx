@@ -7,11 +7,13 @@ import Home from "../pages/Home";
 import Preferencias from "../pages/Preferencias";
 import Resultado from "../pages/Resultado";
 import Splash from "../pages/Splash";
+import Apresentacao from "../pages/Apresentacao";
 
 export default function AppRoutes(){
     return(
             <Routes>
                 <Route path="/" element={<Splash/>}/>
+                <Route path="/apresentacao" element={<Apresentacao/>}/>
                 <Route path="/home" element={<Home />}/>
                 <Route path="/criar" element={<CriarSala />}/>
                 <Route path="/sala/:codigo" element={<EntrarSala />}/>
