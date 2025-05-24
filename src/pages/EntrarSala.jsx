@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import bgImage from '../assets/bg.png';
-import pessoasImage from '../assets/3pessoas.png';
+import bgImage from '../assets/bg.svg';
+import pessoasImage from '../assets/amigos.svg';
 import logo from '../assets/LOGO.svg';
 
 export default function LoginSala() {
@@ -22,11 +22,11 @@ export default function LoginSala() {
         backgroundRepeat: 'no-repeat',
         minHeight: '100vh',
       }}
-      className="flex flex-col items-center justify-between px-4 py-6 relative text-white">
+      className="flex flex-col items-center justify-between px-4 py-6 relative text-white font-[Poppins]">
       {/*User*/}
       <div className="absolute top-4 left-4 flex items-center gap-2">
-        <div className="w-4 h-4 bg-gray-300 rounded-full"></div>
-        <span className="text-sm font-semibold">user</span>
+        <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
+        <span className="text-base font-semibold">user</span>
       </div>
       <div className="flex flex-col items-center mt-16">
         {/*Logo RolêMap*/}
@@ -56,7 +56,7 @@ export default function LoginSala() {
       <img
         src={pessoasImage}
         alt="Três pessoas"
-        className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-40 md:w-56"/>
+        className="absolute  w-100 -bottom-0"/>
     </div>
   );
 }
