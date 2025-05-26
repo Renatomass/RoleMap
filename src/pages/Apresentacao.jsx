@@ -10,17 +10,17 @@ const slides = [
   {
     titulo: "⚙️ Defina as preferências",
     texto: "Escolha categoria, distância, preço e mais.",
-    img: "./public/assets/02.png",
+    img: "../public/assets/02.png",
   },
   {
     titulo: "🧠 O algoritmo sugere",
     texto: "Com base nas escolhas, o app encontra o rolê ideal.",
-    img: "./public/assets/03.png",
+    img: "../public/assets/03.png",
   },
   {
     titulo: "🗳️ Votem em grupo",
     texto: "Todos votam. Se a maioria topar... partiu!",
-    img: "./public/assets/04.png",
+    img: "../public/assets/04.png",
   },
 ];
 
