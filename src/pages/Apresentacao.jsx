@@ -39,7 +39,7 @@ export default function Apresentacao() {
         <p className="text-2xl text-white/80">{slides[atual].texto}</p>
 
         <div className="flex justify-between items-center mt-6">
-          <button onClick={voltar} className="text-sm px-4 py-2 bg-white/10 rounded-xl font-pdr font-bold cursor-pointer">← Voltar</button>
+          <button onClick={voltar} className="text-sm px-4 py-2 bg-white/10 rounded-xl font-pdr font-bold cursor-pointer">⬅️ Voltar</button>
           <div className="flex gap-1">
             {slides.map((_, i) => (
               <div
@@ -48,7 +48,7 @@ export default function Apresentacao() {
               />
             ))}
           </div>
-          <button onClick={avancar} className="text-sm px-4 py-2 bg-white/10 rounded-xl font-pdr font-bold cursor-pointer">Próximo →</button>
+          <button onClick={avancar} className="text-sm px-4 py-2 bg-white/10 rounded-xl font-pdr font-bold cursor-pointer">Próximo ➡️</button>
         </div>
       </div>
     </PageWrapper>

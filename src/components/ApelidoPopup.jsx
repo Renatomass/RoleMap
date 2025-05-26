@@ -1,4 +1,16 @@
 export default function ApelidoPopup ({apelido, setApelido, onConfirmar, onCancelar, erro, animar}) {
+
+    const handleApelidoConfirmar = () => {
+  if (codigoDigitado.trim().toUpperCase() === "ROLE123") {
+    setCodigoSala("ROLE123");
+    navigate("/CodeRoom");
+  } else {
+    setErroApelido(true);
+    setTimeout(() => setErroApelido(false), 800);
+  }
+};
+
+
     return (
     <div className="fixed inset-0 flex items-center justify-center z-50 opacity-98 backdrop-blur-sm animate-fade">
         <div className={`relative border-5 border-purple-700 bg-white text-shadow-purple-900 p-6 rounded-xl shadow-xl w-full max-w-sm ${animar ? "animate-popup-in" : "animate-popup-out"}`}>

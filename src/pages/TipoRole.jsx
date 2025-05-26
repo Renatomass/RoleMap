@@ -60,10 +60,10 @@ export default function TipoRole() {
   };
 
   const handleCriarRole = () => {
-    const novoCodigo = GeradorCod();
-    setCodigoSala(novoCodigo);
-    navigate("/CodeRoom");
-  };
+  const codigoSimulado = "ROLE123"; 
+  setCodigoSala(codigoSimulado);
+  navigate("/CodeRoom");
+};
 
   return (
     <PageWrapper>
