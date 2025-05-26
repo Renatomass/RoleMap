@@ -25,7 +25,7 @@ export default function SliderFiltro({ label, icon, min = 0, max = 50, step = 1,
         step={step}
         value={value}
         onChange={onChange}
-        className="w-full accent-purple-500 border-0 cursor-grabbing"
+        className="w-full  accent-purple-500 border-0 cursor-grabbing"
       />
     </div>
   );

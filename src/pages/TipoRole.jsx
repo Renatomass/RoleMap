@@ -82,7 +82,7 @@ export default function TipoRole() {
             />
           ))}
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 justify-center">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 justify-between">
           <SliderFiltro
             label="Distância"
             icon={<span className="text-xl">📍</span>}

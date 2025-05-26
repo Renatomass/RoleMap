@@ -1,7 +1,7 @@
 export default function InputText({ label, placeholder, value, onChange }) {
   return (
     <div className="flex flex-col w-full max-w-xs">
-      {label && <label className="text-white w-130  text-center text-base font-semibold mb-2">{label}</label>}
+      {label && <label className="text-white w-130 text-start text-base pl-4 font-semibold mb-2">{label}</label>}
       <input
         type="text"
         value={value}
