@@ -1,7 +1,13 @@
+import { Link } from "react-router-dom";
+import BtnUser from "../components/BtnUser";
+import LogoMarca from "../components/LogoMarca";
+import PageWrapper from "../components/PageWrapper";
+
 export default function Preferencias() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-blue-500 text-white text-2xl">
-      funcionando!
-    </div>
+    <PageWrapper>
+        <BtnUser/>
+          <div className="z-10 text-center mb-10"><LogoMarca/></div>
+    </PageWrapper>
   );
 }

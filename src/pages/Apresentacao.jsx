@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import PageWrapper from "../components/PageWrapper";
+import LogoMarca from "../components/LogoMarca";
 
 const Apresentacao = () => {
   const [step, setStep] = useState(0);
@@ -14,7 +15,7 @@ const Apresentacao = () => {
   
   return (
     <PageWrapper>
-      
+      <LogoMarca/>
         {step === 0 && (
           <h1 className="text-3xl">
             “E se escolher o rolê não fosse um problema?”
