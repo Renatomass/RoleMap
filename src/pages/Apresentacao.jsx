@@ -5,22 +5,22 @@ const slides = [
   {
     titulo: "🎯 Crie uma sala",
     texto: "Comece um rolê do zero e convide seus amigos.",
-    img: "./src/assets/001.png",
+    img: "./public/assets/001.png",
   },
   {
     titulo: "⚙️ Defina as preferências",
     texto: "Escolha categoria, distância, preço e mais.",
-    img: "./src/assets/02.png",
+    img: "./public/assets/02.png",
   },
   {
     titulo: "🧠 O algoritmo sugere",
     texto: "Com base nas escolhas, o app encontra o rolê ideal.",
-    img: "./src/assets/03.png",
+    img: "./public/assets/03.png",
   },
   {
     titulo: "🗳️ Votem em grupo",
     texto: "Todos votam. Se a maioria topar... partiu!",
-    img: "./src/assets/04.png",
+    img: "./public/assets/04.png",
   },
 ];
 
