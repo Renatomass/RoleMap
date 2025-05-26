@@ -11,7 +11,7 @@ export default function MsgInput() {
 
   return (
     <div className="w-full">
-      <label className="text-sm font-bold text-white mb-1 block">Sua opinião (máx. 15 caracteres):</label>
+      <label className="text-sm font-bold pl-4 text-white mb-1 block">Sua opinião (máx. 15 caracteres):</label>
       <input
         type="text"
         value={mensagem}

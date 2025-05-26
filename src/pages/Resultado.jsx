@@ -3,8 +3,7 @@ import Timer from "../components/Timer";
 import CardLocal from "../components/CardLocal";
 import MsgInput from "../components/MsgInput";
 import Feedback from "../components/Feedback";
-import BtnUser from '../components/BtnUser';
-
+import BtnUser from "../components/BtnUser";
 
 export default function ResultadoRole() {
   const amigos = [
@@ -16,9 +15,11 @@ export default function ResultadoRole() {
 
   return (
     <PageWrapper>
-      <BtnUser/>
+      <BtnUser />
       <Timer tempo="00:18" />
-      <div className="flex flex-col-1 lg:flex-row gap-8 justify-center items-center w-full mt-4 px-4">
+
+      <div className="bg-[#2c1257] rounded-3xl p-6 w-full max-w-4xl mx-auto mt-8 text-white shadow-xl flex flex-col lg:flex-row items-center justify-around gap-6">
+        
         <CardLocal
           nome="Bistrô Solar"
           imagem="src/assets/restaurante.jpg"
@@ -26,15 +27,15 @@ export default function ResultadoRole() {
           distancia="1,5km"
         />
 
-        <div className="bg-[#2c1257] rounded-3xl p-6 w-full max-w-lg text-white shadow-lg">
+        <div className="w-full max-w-md">
           <h2 className="text-2xl font-bold mb-4 text-center">O que você achou?</h2>
           <MsgInput />
-          <div className="flex justify-around mt-6">
+          <div className="flex flex-wrap justify-around mt-6 gap-2">
             {amigos.map((amigo, i) => (
               <Feedback key={i} nome={amigo.nome} msg={amigo.msg} />
             ))}
           </div>
-        </div>      
+        </div>
       </div>
     </PageWrapper>
   );
