@@ -33,7 +33,7 @@ export default function ResultadoFinal() {
       <div className="w-full h-72 sm:h-80 max-w-sm rounded-3xl shadow-2xl text-white relative overflow-hidden mx-auto">
         <div className="absolute inset-0 bg-gradient-to-b from-[#000000] to-[#0004ff] z-0"></div>
         <img
-          src="/src/assets/restaurante.jpg"
+          src="../assets/restaurante.jpg"
           alt="Local escolhido"
           className="absolute inset-0 w-full h-full object-cover opacity-40 z-0"
         />
