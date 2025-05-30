@@ -23,7 +23,7 @@ export default function ResultadoRole() {
     <PageWrapper>
       <CardLocal
         nome="Bistrô Solar"
-        imagem="src/assets/restaurante.jpg"
+        imagem="../assets/restaurante.png"
         nota={4.5}
         distancia="1,8km"
       />
