@@ -23,13 +23,12 @@ export default function TipoRole() {
   const { setCodigoSala } = useUser();
   const categorias = [img01, img02, img03, img04, img05];
   const navigate = useNavigate();
-
   const aleatorizarFiltros = () => {
-    const categoriaAleatoria = Math.floor(Math.random() * categorias.length);
-    const distanciaAleatoria = Math.floor(Math.random() * 51);
-    const precoAleatorio = Math.floor(Math.random() * 4);
-    const notaAleatoria = Math.floor(Math.random() * 6); 
-    const palavras = [
+  const categoriaAleatoria = Math.floor(Math.random() * categorias.length);
+  const distanciaAleatoria = Math.floor(Math.random() * 51);
+  const precoAleatorio = Math.floor(Math.random() * 4);
+  const notaAleatoria = Math.floor(Math.random() * 6);
+  const palavras = [
       "rolê top",
       "balada",
       "gastronomia",
@@ -49,7 +48,6 @@ export default function TipoRole() {
       "Rolê Misterioso",
     ];
     const nomeAleatorio = nomes[Math.floor(Math.random() * nomes.length)];
-
     setCategoriaSelecionada(categoriaAleatoria);
     setDistancia(distanciaAleatoria);
     setPreco(precoAleatorio);
@@ -58,11 +56,11 @@ export default function TipoRole() {
     setNomeRole(nomeAleatorio);
   };
 
-  const handleCriarRole = () => {
-  const codigoSimulado = (GeradorCod); 
-  setCodigoSala(codigoSimulado);
-  navigate("/CodeRoom");
-};
+    const handleCriarRole = () => {
+    const codigoSimulado = GeradorCod;
+    setCodigoSala(codigoSimulado);
+    navigate("/CodeRoom");
+  };
 
   return (
     <PageWrapper>
