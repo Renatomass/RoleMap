@@ -1,19 +1,19 @@
 import { useUser } from "../context/UseContext";
-import { useNavigate } from "react-router-dom";
+import BtnVoltar from "./BtnVoltar";
 export default function BtnUser(){
-    const navigate = useNavigate();
     const { user } = useUser();
 
-    const nome = user?.apelido || user?.email?.split("@")[0] || "convidado";
+    const nome = user?.apelido || user?.email?.split("@")[0] || " ";
     const nomeUser = nome.charAt(0).toUpperCase() + nome.slice(1);
 
     return (
-        <div className="absolute top-6 left-6 flex items-center gap-2 z-10">
-            <button onClick={() => navigate(-1)} 
-                className="text-white text-4xl font-bold cursor-pointer ">⬅️</button>
-                    <div className="w-6 h-6 bg-gray-200 rounded-full"></div>
+        <>
+        <BtnVoltar/>
+        <div className="absolute top-5 left-20 flex items-center gap-2 z-10">
+                    <div className="flex w-12 h-12 bg-gray-200 rounded-full justify-center items-center text-3xl drop-shadow-black">💀</div>
                         <span className="text-lg font-bold">
                             {nomeUser}</span>
         </div>
+        </>
     );
 }

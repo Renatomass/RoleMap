@@ -1,11 +1,17 @@
+import { useState } from "react";
 import PageWrapper from "../components/PageWrapper";
-import Timer from "../components/Timer";
 import CardLocal from "../components/CardLocal";
-import MsgInput from "../components/MsgInput";
 import Feedback from "../components/Feedback";
-import BtnUser from "../components/BtnUser";
+import ModalDigaAlgo from "../components/ModalDigaAlgo";
 
 export default function ResultadoRole() {
+  const [mostrarModalDiga, setMostrarModalDiga] = useState(false);
+
+  const handleEnviarMensagem = (mensagem) => {
+    console.log("Mensagem enviada:", mensagem);
+    setMostrarModalDiga(false);
+  };
+
   const amigos = [
     { nome: "João", msg: "Cuida!" },
     { nome: "Maria", msg: "Paia demais!" },
@@ -15,26 +21,45 @@ export default function ResultadoRole() {
 
   return (
     <PageWrapper>
-      <BtnUser />
-      <Timer tempo="00:18" />
+      <CardLocal
+        nome="Bistrô Solar"
+        imagem="src/assets/restaurante.jpg"
+        nota={4.5}
+        distancia="1,8km"
+      />
 
-      <div className="bg-[#2c1257] rounded-3xl p-6 w-full max-w-4xl mx-auto mt-8 text-white shadow-xl flex flex-col lg:flex-row items-center justify-around gap-6">
-        
-        <CardLocal
-          nome="Bistrô Solar"
-          imagem="src/assets/restaurante.jpg"
-          nota={4.5}
-          distancia="1,5km"
-        />
+      <div className="mt-4 text-center">
+        <p className="text-2xl font-semibold mb-2">O que você achou?</p>
+        <div className="flex flex-row justify-center gap-2 flex-wrap">
+          <button className="px-3 py-1 bg-[#15128598] rounded-full text-sm hover:scale-105 transition cursor-pointer">
+            🤬 Não gostei!
+          </button>
 
-        <div className="w-full max-w-md">
-          <h2 className="text-2xl font-bold mb-4 text-center">O que você achou?</h2>
-          <MsgInput />
-          <div className="flex flex-wrap justify-around mt-6 gap-2">
-            {amigos.map((amigo, i) => (
-              <Feedback key={i} nome={amigo.nome} msg={amigo.msg} />
-            ))}
-          </div>
+          <button
+            onClick={() => setMostrarModalDiga(true)}
+            className="px-3 py-1 bg-[#15128598] rounded-full text-sm hover:scale-105 transition cursor-pointer font-pdr"
+          >
+            💭 Diga algo
+          </button>
+
+          <button className="px-3 py-1 bg-[#15128598] rounded-full text-sm hover:scale-105 transition cursor-pointer">
+            😎 Partiu!
+          </button>
+        </div>
+
+        {mostrarModalDiga && (
+          <ModalDigaAlgo
+            onFechar={() => setMostrarModalDiga(false)}
+            onEnviar={handleEnviarMensagem}
+          />
+        )}
+      </div>
+
+      <div className="w-full max-w-md ml-2 mt-6">
+        <div className="flex flex-wrap justify-around gap-2">
+          {amigos.map((amigo, i) => (
+            <Feedback key={i} nome={amigo.nome} msg={amigo.msg} />
+          ))}
         </div>
       </div>
     </PageWrapper>

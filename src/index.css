@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 @theme {
   --color-btn-cadastro: #844FC2;
   --color-btn-yellow: #FDBA46;
@@ -36,3 +44,4 @@
   }
 
 }
+

@@ -16,7 +16,6 @@ export default function LoginSala() {
   };
   return (
     <PageWrapper>
-        <BtnUser/>
       <div className="flex flex-col items-center mt-2">
         <LogoMarca/>
         <input

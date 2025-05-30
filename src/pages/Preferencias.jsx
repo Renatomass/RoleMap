@@ -6,7 +6,6 @@ import PageWrapper from "../components/PageWrapper";
 export default function Preferencias() {
   return (
     <PageWrapper>
-        <BtnUser/>
           <div className="z-10 text-center mb-10"><LogoMarca/></div>
     </PageWrapper>
   );

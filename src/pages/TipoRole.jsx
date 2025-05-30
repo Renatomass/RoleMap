@@ -9,7 +9,6 @@ import img04 from "../assets/pizza.svg";
 import img05 from "../assets/sushi.svg";
 import CategoriaItem from "../components/CategoriaItem";
 import PageWrapper from "../components/PageWrapper";
-import BtnUser from "../components/BtnUser";
 import SliderFiltro from "../components/SliderFilter";
 import InputText from "../components/InputText";
 import BtnPrincipal from "../components/BtnPrincipal";
@@ -27,9 +26,9 @@ export default function TipoRole() {
 
   const aleatorizarFiltros = () => {
     const categoriaAleatoria = Math.floor(Math.random() * categorias.length);
-    const distanciaAleatoria = Math.floor(Math.random() * 101); // 0 a 100
-    const precoAleatorio = Math.floor(Math.random() * 4); // 0 a 3 (como $ até $$$$)
-    const notaAleatoria = Math.floor(Math.random() * 6); // 0 a 5 estrelas
+    const distanciaAleatoria = Math.floor(Math.random() * 51);
+    const precoAleatorio = Math.floor(Math.random() * 4);
+    const notaAleatoria = Math.floor(Math.random() * 6); 
     const palavras = [
       "rolê top",
       "balada",
@@ -60,14 +59,13 @@ export default function TipoRole() {
   };
 
   const handleCriarRole = () => {
-  const codigoSimulado = "ROLE123"; 
+  const codigoSimulado = (GeradorCod); 
   setCodigoSala(codigoSimulado);
   navigate("/CodeRoom");
 };
 
   return (
     <PageWrapper>
-      <BtnUser />
       <div className="relative">
         <h1 className="w-full mt-12 mb-12 text-5xl font-bold text-center font-pdr">
           Tipo de Rolê:
@@ -82,7 +80,7 @@ export default function TipoRole() {
             />
           ))}
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 justify-between">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 place-items-center">
           <SliderFiltro
             label="Distância"
             icon={<span className="text-xl">📍</span>}
