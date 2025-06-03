@@ -70,7 +70,7 @@ cd RoleMap
 # Instalar e rodar o backend
 cd backend
 npm install
-npm run dev
+node server.js
 
 # Em outro terminal, rodar o frontend
 cd ../frontend
