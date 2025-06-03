@@ -3,8 +3,8 @@ import http from "http";
 import cors from "cors";
 import { Server } from "socket.io";
 
-import salaRoutes from "./routes/salaRoutes.js";
-import socketHandlers from "./sockets/socketHandlers.js";
+import salaRoutes from "./server/routes/salaRoutes.js";
+import socketHandlers from "./server/sockets/socketHandlers.js";
 
 const app = express();
 const server = http.createServer(app);
