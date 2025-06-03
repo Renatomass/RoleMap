@@ -3,17 +3,26 @@ import { useNavigate } from 'react-router-dom';
 import pessoasImage from '../assets/amigos.svg';
 import LogoMarca from '../components/LogoMarca';
 import PageWrapper from '../components/PageWrapper';
-import BtnUser from '../components/BtnUser';
+import { useUser } from '../context/UseContext';
+import socket from "../services/sockets"; 
 
-export default function LoginSala() {
+export default function EntrarSala() {
   const [codigo, setCodigo] = useState('');
   const navigate = useNavigate();
+  const {setCodigoSala, nomeUsuario} = useUser();
 
   const entrarNaSala = () => {
-    if (codigo.trim() !== '') {
-      navigate(`/${codigo}`);
+    const codigoLimpo = codigo.trim().toUpperCase();
+    if (!codigoLimpo) {
+      alert("Digite um código válido");
+      return;
     }
+
+    setCodigoSala(codigoLimpo);
+    socket.emit ("entrar_na_sala", {codigo: codigoLimpo, apelido: nomeUsuario});
+    navigate("/espera");
   };
+
   return (
     <PageWrapper>
       <div className="flex flex-col items-center mt-2">

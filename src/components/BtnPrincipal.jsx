@@ -1,4 +1,3 @@
-// src/components/BotaoPrincipal.jsx
 export default function BtnPrincipal({ children, onClick, Stylo = "", full = false }) {
   return (
     <button

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useUser } from "../context/UseContext";
-import { GeradorCod } from "../utils/GeradorCod";
 import { useNavigate } from "react-router-dom";
 import img01 from "../assets/cerveja.svg";
 import img02 from "../assets/dance.svg";
@@ -12,6 +11,8 @@ import PageWrapper from "../components/PageWrapper";
 import SliderFiltro from "../components/SliderFilter";
 import InputText from "../components/InputText";
 import BtnPrincipal from "../components/BtnPrincipal";
+import socket from "../services/sockets";
+import { api } from "../services/api";
 
 export default function TipoRole() {
   const [categoriaSelecionada, setCategoriaSelecionada] = useState(null);
@@ -19,35 +20,27 @@ export default function TipoRole() {
   const [preco, setPreco] = useState(2);
   const [nota, setNota] = useState(4);
   const [keywords, setKeywords] = useState("");
-  const [nomeRole, setNomeRole] = useState("");
-  const { setCodigoSala } = useUser();
-  const categorias = [img01, img02, img03, img04, img05];
+  const { setCodigoSala, setNomeRole, nomeRole, user } = useUser();
   const navigate = useNavigate();
+
+  const categorias = [img01, img02, img03, img04, img05];
+
   const aleatorizarFiltros = () => {
-  const categoriaAleatoria = Math.floor(Math.random() * categorias.length);
-  const distanciaAleatoria = Math.floor(Math.random() * 51);
-  const precoAleatorio = Math.floor(Math.random() * 4);
-  const notaAleatoria = Math.floor(Math.random() * 6);
-  const palavras = [
-      "rolê top",
-      "balada",
-      "gastronomia",
-      "aventura",
-      "relax",
-      "drinks",
-      "food",
-      "bar",
+    const categoriaAleatoria = Math.floor(Math.random() * categorias.length);
+    const distanciaAleatoria = Math.floor(Math.random() * 51);
+    const precoAleatorio = Math.floor(Math.random() * 4);
+    const notaAleatoria = Math.floor(Math.random() * 6);
+    const palavras = [
+      "rolê top", "balada", "gastronomia", "aventura",
+      "relax", "drinks", "food", "bar"
     ];
-    const keywordAleatoria =
-      palavras[Math.floor(Math.random() * palavras.length)];
     const nomes = [
-      "Noitada aleatória",
-      "Rolê maluco",
-      "Bora ver no que dá",
-      "Desafio do rolê",
-      "Rolê Misterioso",
+      "Noitada aleatória", "Rolê maluco", "Bora ver no que dá",
+      "Desafio do rolê", "Rolê Misterioso"
     ];
+    const keywordAleatoria = palavras[Math.floor(Math.random() * palavras.length)];
     const nomeAleatorio = nomes[Math.floor(Math.random() * nomes.length)];
+
     setCategoriaSelecionada(categoriaAleatoria);
     setDistancia(distanciaAleatoria);
     setPreco(precoAleatorio);
@@ -56,10 +49,29 @@ export default function TipoRole() {
     setNomeRole(nomeAleatorio);
   };
 
-    const handleCriarRole = () => {
-    const codigoSimulado = GeradorCod;
-    setCodigoSala(codigoSimulado);
-    navigate("/CodeRoom");
+  const handleCriarRole = async () => {
+    try {
+      const nomeFinal = nomeRole.trim() || "Rolê sem nome";
+      const response = await api.post("/criar-sala", {
+        nome: nomeFinal,
+      });
+
+      const { codigo, nome } = response.data;
+
+      setCodigoSala(codigo);
+      setNomeRole(nome);
+
+      // Se não houver nome no contexto, peça um via prompt
+      const apelido = user?.nome || prompt("Digite seu nome para entrar na sala:");
+      socket.emit("entrar_na_sala", {
+        codigo,
+        apelido: apelido || "Anfitrião",
+      });
+
+      navigate("/CodeRoom");
+    } catch (error) {
+      console.log("Erro ao criar sala:", error);
+    }
   };
 
   return (
@@ -68,7 +80,8 @@ export default function TipoRole() {
         <h1 className="w-full mt-12 mb-12 text-5xl font-bold text-center font-pdr">
           Tipo de Rolê:
         </h1>
-        <div className="flex gap-4 justify-center flex-wrap my-6 sm: flex-col-1">
+
+        <div className="flex gap-4 justify-center flex-wrap my-6">
           {categorias.map((icon, index) => (
             <CategoriaItem
               key={index}
@@ -78,6 +91,7 @@ export default function TipoRole() {
             />
           ))}
         </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 place-items-center">
           <SliderFiltro
             label="Distância"
@@ -95,7 +109,7 @@ export default function TipoRole() {
             min={0}
             max={3}
             step={1}
-            onChange={(e) => setPreco(e.target.value)}
+            onChange={(e) => setPreco(Number(e.target.value))}
           />
           <SliderFiltro
             label="Classificação"
@@ -104,10 +118,11 @@ export default function TipoRole() {
             min={0}
             max={5}
             step={1}
-            onChange={(e) => setNota(e.target.value)}
+            onChange={(e) => setNota(Number(e.target.value))}
           />
         </div>
-        <div className="grid grid-col-1 w-full sm:grid-cols-2 gap-4 my-4">
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-4">
           <InputText
             label="Palavras-chave"
             placeholder="Inserir palavras-chave"
@@ -121,14 +136,14 @@ export default function TipoRole() {
             onChange={(e) => setNomeRole(e.target.value)}
           />
         </div>
-        <div className="grid grid-row sm:grid-cols-2 gap-4 my-4">
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-4">
           <BtnPrincipal
             Stylo="w-full p-2 bg-btn-cadastro hover:bg-purple-700 text-white font-[Poppins] font-bold mt-1 rounded-2xl text-lg cursor-pointer transition-all"
             onClick={aleatorizarFiltros}
           >
             Supreenda-me
           </BtnPrincipal>
-
           <BtnPrincipal
             full
             Stylo="p-2 bg-teal-300 hover:bg-teal-400 text-white font-[Poppins] font-bold mt-1 rounded-2xl text-lg cursor-pointer transition-all"

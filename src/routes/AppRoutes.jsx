@@ -11,6 +11,7 @@ import Preferencias from "../pages/Preferencias";
 import Resultado from "../pages/Resultado";
 import Final from "../pages/Final";
 import CodeRoom from "../pages/CodeRoom";
+import SalaEspera from "../pages/SalaEspera";
 
 export default function AppRoutes(){
     return(
@@ -19,6 +20,7 @@ export default function AppRoutes(){
                 <Route path="/apresentacao" element={<Apresentacao/>}/>
                 <Route path="/home" element={<Home />}/>
                 <Route path="/Cadastro" element={<Cadastro />} />
+                <Route path="/espera" element={<SalaEspera />} />
                 <Route path="/UserSala" element={<UserSala />}/>
                 <Route path="/TipoRole" element={<TipoRole />}/>
                 <Route path="/sala/convidado" element={<EntrarSala />}/>

@@ -4,13 +4,10 @@ import PageWrapper from "../components/PageWrapper";
 import BtnPrincipal from "../components/BtnPrincipal";
 import PopupBuscando from "../components/PopupBuscando";
 import { useState } from "react";
-import { GeradorCod } from "../utils/GeradorCod";
 
 export default function CodeRoom() {
   const navigate = useNavigate();
   const { codigoSala } = useUser();
-<span className="text-white text-sm">Sala: {codigoSala}</span>
-
 
   const [buscando, setBuscando] = useState(false);
   const iniciarBusca = () => {
@@ -22,6 +19,7 @@ export default function CodeRoom() {
   };
 
   const copiarCodigo = () => {
+    navigator.clipboard.writeText(codigoSala);
     alert("Código copiado!");
   };
 
@@ -32,7 +30,7 @@ export default function CodeRoom() {
         <p className="text-1xl text-white/90">Compartilhe com seu amigos.</p>
 
         <div className="bg-[#4b2c84] animate-bounce text-4xl font-extrabold px-8 py-4 rounded-xl tracking-widest mb-10 mt-10 shadow-md">
-          {GeradorCod()}
+          {codigoSala}
         </div>
 
         <div className="flex flex-col gap-4 w-full max-w-sm items-center">

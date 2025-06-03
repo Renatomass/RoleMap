@@ -4,6 +4,7 @@ import PageWrapper from '../components/PageWrapper';
 import LogoMarca from '../components/LogoMarca';
 import WhiteContainer from '../components/WhiteContainer';
 import { useUser } from '../context/UseContext';
+import { api } from '../services/api';
 
 export default function Cadastro() {
   const navigate = useNavigate();
@@ -15,13 +16,23 @@ export default function Cadastro() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setUser({
-      nome: form.nome,
-      email: form.email
-    });
-    navigate("/UserSala");
+    try {
+      const response = await api.post("/cadastro", form);
+      const { usuario, token} = response.data;
+
+      setUser({
+        id: usuario.id,
+        nome: usuario.nome,
+        email: usuario.email,
+        token: token,
+      });
+      navigate("/UserSala");
+    } catch (error) {
+      console.error("Erro no cadastro:", error);
+      alert("Erro ao cadastrar. Tente novamente");
+    }
   };
 
   return (
