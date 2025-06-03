@@ -4,39 +4,40 @@ import logo from "../assets/LOGO.svg";
 
 export default function Splash() {
   return (
-    <div className="min-h-screen bg-[#7927d9] flex items-center justify-start px-0 font-[Poppins]">
-      <div className="flex flex-col md:flex-row items-center gap-10 max-w-5xl">
-        
-        {/* Imagem */}
-        <img
-          src={mapa}
-          alt="Mapa 3D"
-          className="w-96 md:w-[500px] drop-shadow-xl hover:scale-105 transition-all"
-        />
+    <div className="min-h-screen bg-[#403068] flex items-center justify-center px-4 font-[Poppins] overflow-hidden relative">
+      {/* Imagem do Mapa */}
+      <img src={mapa} alt="Mapa 3D" className="absolute opacity-30  max-w-[600px] min-w-[400px] min-sm:right-250" />
 
-        {/* Texto + Botão */}
-        <div className="text-center md:text-left text-white max-w-md absolute left-3/7">
-          <h1 className="text-8xl font-bold leading-22 mb-5">
-            Rolê<br /><span className="text-white">Map</span>
-          </h1>
-          <p className="text-lg mb-4 leading-6">
-            Encontre o melhor lugar<br />para sair com amigos
-          </p>
+      {/* MEIO DA PAGINA*/}
+      <div className="flex flex-col z-1 items-center w-80 text-white text-center max-w-md md:items-center">
+        <h1 className="text-left text-8xl font-bold mb-10 leading-18">
+          Rolê
+          <br />
+          Map
+        </h1>
+        <p className="text-lg mb-6 leading-6 left-0 drop-shadow-2xl">
+          Encontre o melhor lugar
+          <br />
+          para sair com amigos
+        </p>
 
-          <Link to="/home">
-            <button className=" bg-teal-300 hover:bg-teal-400 drop-shadow-xl text-[#ffffff] font-bold px-8 py-3 rounded-lg cursor-pointer hover:scale-105 hover:bg-[] transition-all">
-              Encontre o rolê perfeito
-            </button>
-          </Link>
-        </div>
-        
-          <img
-          src={logo}
-          alt="Logo App"
-          className="w-96 md:w-[250px] drop-shadow-xl hover:scale-105 transition-all absolute left-3/4"
-          />
+        <Link to="/home">
+          <button className="w-80 mb-2 bg-[#723BA6] hover:bg-[#723BA6] text-white font-bold px-6 py-3 rounded-lg drop-shadow-md transition-transform transform hover:scale-105 cursor-pointer">
+            Encontre o rolê perfeito
+          </button>
+        </Link>
 
+        <Link to="/apresentacao">
+          <button className="w-80 bg-[#FDBC46] hover:bg-[#FDBC46] text-white font-bold px-6 py-3 rounded-lg drop-shadow-md transition-transform transform hover:scale-105 cursor-pointer">
+            O que é o RolêMap?
+          </button>
+        </Link>
       </div>
+      <img
+        src={logo}
+        alt="Logo App"
+        className="absolute  bottom-50% -right-40 w-70 md:w-100 md:-right-50 md: bottom-50%  drop-shadow-xl "
+      />
     </div>
   );
 }

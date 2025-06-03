@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function Esperando() {
@@ -7,7 +7,7 @@ export default function Esperando() {
   useEffect(() => {
     const timer = setTimeout(() => {
       navigate('/resultado');
-    }, 5000); // 5 segundos
+    }, 5000); 
 
     return () => clearTimeout(timer);
   }, [navigate]);
