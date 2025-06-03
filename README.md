@@ -141,7 +141,3 @@ npm run dev
 * Backend usa ESModules (`type: "module"`)
 
 ---
-
-## 💬 Dúvidas ou sugestões?
-
-Fale com [@Renatomass](https://github.com/Renatomass)
