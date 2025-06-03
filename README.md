@@ -70,7 +70,7 @@ cd RoleMap
 # Instalar e rodar o backend
 cd backend
 npm install
-npm run dev
+node server.js
 
 # Em outro terminal, rodar o frontend
 cd ../frontend
@@ -110,7 +110,6 @@ npm run dev
 * `develop`: versão de desenvolvimento integrada
 * `backend`: alterações específicas do servidor
 * `frontend`: alterações específicas do client
-* `backup`: save dos dados
 * `feat/`: novas funcionalidades (ex: `feat/votacao`)
 * `fix/`: correções de bugs
 * `refactor/`: refatorações
@@ -142,7 +141,3 @@ npm run dev
 * Backend usa ESModules (`type: "module"`)
 
 ---
-
-## 💬 Dúvidas ou sugestões?
-
-Fale com [@Renatomass](https://github.com/Renatomass)
