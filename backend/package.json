@@ -1,17 +1,23 @@
 {
-  "type": "module",
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Back-end do app RolêMap",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node server.js"
+  },
   "dependencies": {
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
+    "express-validator": "^7.0.1",
     "jsonwebtoken": "^9.0.2",
-    "mysql2": "^3.14.1",
+    "mysql2": "^3.4.3",
     "sequelize": "^6.37.7",
     "socket.io": "^4.8.1"
   },
-
-  "scripts": {
-  "dev": "node server.js"
-}
+  "devDependencies": {
+    "sequelize-cli": "^6.6.3"
+  }
 }
