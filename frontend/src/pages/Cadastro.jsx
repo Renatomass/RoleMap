@@ -19,7 +19,7 @@ export default function Cadastro() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post("/cadastro", form);
+      const response = await api.post("/usuarios/cadastro", form);
       const { usuario, token} = response.data;
 
       setUser({
@@ -30,9 +30,15 @@ export default function Cadastro() {
       });
       navigate("/UserSala");
     } catch (error) {
-      console.error("Erro no cadastro:", error);
-      alert("Erro ao cadastrar. Tente novamente");
-    }
+  console.error("Erro bruto no cadastro:", error);
+
+  if (error.response) {
+    console.log("Erro da API:", error.response.data);
+    alert(error.response.data.erro || "Erro ao cadastrar (API).");
+  } else {
+    alert("Erro ao cadastrar (sem resposta do servidor).");
+  }
+}
   };
 
   return (

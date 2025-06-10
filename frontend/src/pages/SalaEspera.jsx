@@ -4,23 +4,25 @@ import PageWrapper from "../components/PageWrapper";
 import socket from "../services/sockets";
 
 export default function SalaEspera() {
-  const { codigoSala, nomeRole } = useUser();
+  const { codigo, nomeRole } = useUser();
   const [participantes, setParticipantes] = useState([]);
 
   useEffect(() => {
-    // Ouve atualizações de participantes
+    if (codigo) {
+      // Solicita lista inicial ao servidor
+      socket.emit("listar_participantes", codigo);
+    }
+
     socket.on("atualizar_participantes", (lista) => {
       setParticipantes(lista);
     });
 
-    // Remove o listener ao desmontar o componente
     return () => {
       socket.off("atualizar_participantes");
     };
-  }, []);
+  }, [codigo]);
 
-  // Evita renderização caso a sala ainda esteja sendo carregada
-  if (!codigoSala) {
+  if (!codigo) {
     return (
       <PageWrapper>
         <div className="text-white text-center mt-10">
@@ -46,7 +48,7 @@ export default function SalaEspera() {
               key={index}
               className="bg-purple-800 px-4 py-2 rounded-xl shadow-md"
             >
-              {p.apelido || "Convidado"}
+              {typeof p === "string" ? p : p?.apelido || "Convidado"}
             </div>
           ))}
         </div>

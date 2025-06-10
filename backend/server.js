@@ -12,14 +12,40 @@ const io = new Server(server, {
   cors: { origin: "*" }
 });
 
-app.use(cors());
-app.use(express.json());
-app.use("/api", salaRoutes);
-app.use("/api", usuarioRoutes);
+const salas = {};
 
 io.on("connection", (socket) => {
   console.log("🔌 Novo usuário conectado:", socket.id);
-  // socketHandlers(io, socket); // Se quiser adicionar depois
+
+  socket.on("entrar_na_sala", ({ codigo, apelido }) => {
+    socket.join(codigo);
+
+    if (!salas[codigo]) salas[codigo] = [];
+    salas[codigo].push(apelido);
+
+    io.to(codigo).emit("atualizar_participantes", salas[codigo]);
+  });
+
+  socket.on("listar_participantes", (codigo) => {
+    io.to(socket.id).emit("atualizar_participantes", salas[codigo] || []);
+  });
+
+  socket.on("disconnect", () => {
+  });
+});
+
+app.use(cors());
+app.use(express.json());
+
+app.use("/sala", salaRoutes);
+app.use("/usuarios", usuarioRoutes);
+
+app.get('/', (_req, res) => {
+  res.send('Servidor está vivo! 🚀');
+});
+
+io.on("connection", (socket) => {
+  console.log("🔌 Novo usuário conectado:", socket.id);
 });
 
 const PORT = 3001;

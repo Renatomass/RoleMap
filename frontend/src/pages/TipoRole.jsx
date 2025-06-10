@@ -22,8 +22,17 @@ export default function TipoRole() {
   const [keywords, setKeywords] = useState("");
   const { setCodigoSala, setNomeRole, nomeRole, user } = useUser();
   const navigate = useNavigate();
+  const nomeHost = user?.name || "Host";
 
   const categorias = [img01, img02, img03, img04, img05];
+
+  const mapaCategorias = {
+  0: "cerveja",
+  1: "balada",
+  2: "drink casual",
+  3: "pizza",
+  4: "sushi"
+};
 
   const aleatorizarFiltros = () => {
     const categoriaAleatoria = Math.floor(Math.random() * categorias.length);
@@ -31,14 +40,24 @@ export default function TipoRole() {
     const precoAleatorio = Math.floor(Math.random() * 4);
     const notaAleatoria = Math.floor(Math.random() * 6);
     const palavras = [
-      "rolê top", "balada", "gastronomia", "aventura",
-      "relax", "drinks", "food", "bar"
+      "rolê top",
+      "balada",
+      "gastronomia",
+      "aventura",
+      "relax",
+      "drinks",
+      "food",
+      "bar",
     ];
     const nomes = [
-      "Noitada aleatória", "Rolê maluco", "Bora ver no que dá",
-      "Desafio do rolê", "Rolê Misterioso"
+      "Noitada aleatória",
+      "Rolê maluco",
+      "Bora ver no que dá",
+      "Desafio do rolê",
+      "Rolê Misterioso",
     ];
-    const keywordAleatoria = palavras[Math.floor(Math.random() * palavras.length)];
+    const keywordAleatoria =
+      palavras[Math.floor(Math.random() * palavras.length)];
     const nomeAleatorio = nomes[Math.floor(Math.random() * nomes.length)];
 
     setCategoriaSelecionada(categoriaAleatoria);
@@ -50,22 +69,35 @@ export default function TipoRole() {
   };
 
   const handleCriarRole = async () => {
+    if (!user || !user.token){
+      alert("Você precisa esta logado para criar role.");
+      return;
+    }
     try {
-      const nomeFinal = nomeRole.trim() || "Rolê sem nome";
-      const response = await api.post("/criar-sala", {
+      const nomeFinal = nomeRole.trim() || `Rolê do(a) ${nomeHost} `;
+      const response = await api.post("/sala/criar-sala", {
         nome: nomeFinal,
+        tipo_role: mapaCategorias[categoriaSelecionada],
+        palavras_chave: keywords,
+        distancia: `${distancia}km`,
+        preco: preco === 0 ? "baixo" : preco === 3 ? "médio" : "alto",
+        avaliacao_minima: nota.toString(),
+      }, {
+        headers: {
+          Authorization: `Bearer ${user.token}`
+        }
       });
 
-      const { codigo, nome } = response.data;
+      const { codigo, nomeSala, salaId } = response.data;
 
       setCodigoSala(codigo);
-      setNomeRole(nome);
+      setNomeRole(nomeSala);
 
-      // Se não houver nome no contexto, peça um via prompt
-      const apelido = user?.nome || prompt("Digite seu nome para entrar na sala:");
+      const apelido =
+        user?.nome || prompt("Digite seu nome para entrar na sala:");
       socket.emit("entrar_na_sala", {
         codigo,
-        apelido: apelido || "Anfitrião",
+        apelido: apelido || "Convidado",
       });
 
       navigate("/CodeRoom");

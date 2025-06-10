@@ -1,25 +1,47 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Sala extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
+      Sala.belongsTo(models.Usuario, {
+        foreignKey: 'host_id',
+        as: 'host'
+      });
+
+      Sala.hasMany(models.Convidado, {
+        foreignKey: 'sala_id',
+        as: 'convidados'
+      });
+
+      Sala.belongsTo(models.Preferencia, {
+        foreignKey: 'pref_id',
+        as: 'preferencia'
+      });
+
+      Sala.belongsTo(models.Resultado, {
+        foreignKey: 'resultado_id',
+        as: 'resultado'
+      });
     }
   }
+
   Sala.init({
-    codigo: DataTypes.STRING,
     nome: DataTypes.STRING,
-    hostId: DataTypes.INTEGER
+    host_id: DataTypes.INTEGER,
+    ponto_medio: DataTypes.STRING,
+    pref_id: DataTypes.INTEGER,
+    codigo: DataTypes.STRING,
+    localizacao_host: DataTypes.STRING,
+    total_convidados: DataTypes.INTEGER,
+    total_votos: DataTypes.INTEGER,
+    resultado_id: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Sala',
+    tableName: 'salas',
+    underscored: true
   });
+
   return Sala;
 };

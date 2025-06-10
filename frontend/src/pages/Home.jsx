@@ -11,6 +11,7 @@ import BtnCadastreSe from "../components/BtnCadastre-se";
 import BtnEntrarCodigo from "../components/BtnEntrarCodigo";
 import InputLogin from "../components/InputLogin";
 import ApelidoPopup from "../components/ApelidoPopup";
+import { api } from "../services/api"; 
 
 export default function Home() {
   const { user,setUser } = useUser();
@@ -21,18 +22,36 @@ export default function Home() {
   const [popupAnimar, setPopupAnimar] = useState(false);
   
   const navigate = useNavigate();
+
   const handleChange = (e) => {
         const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setUser({
-      senha: form.senha,
-      email: form.email,
-    });
-    navigate("/UserSala");
+    try {
+      const response = await api.post("usuarios/login", {
+        senha: form.senha,
+        email: form.email,
+      });
+      const { usuario, token } = response.data;
+      setUser({
+        id: usuario.id,
+        nome: usuario.nome,
+        email: usuario.email,
+        token: token,
+      });
+
+       
+      navigate("/UserSala");
+
+    } catch (error) {
+    console.error("Erro no login:", error.response?.data || error.message);
+    alert(error.response?.data?.erro || "Erro ao fazer login. Tente novamente.");
+
+    }
+   
   };
 
   const handleApelidoConfirmar = () => {

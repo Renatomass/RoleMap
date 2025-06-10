@@ -1,61 +1,77 @@
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const db = require('../models');
-const { Usuario } = db;
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const { Usuario } = require("../models");
+const usuarioController = {
+  async cadastrar(req, res) {
+    try {
+      const { nome, email, senha } = req.body;
 
-const JWT_SECRET = process.env.JWT_SECRET || 'secreto-superseguro';
-
-const cadastrar = async (req, res) => {
-  const { nome, email, senha } = req.body;
-
-  try {
-    const existe = await Usuario.findOne({ where: { email } });
-    if (existe) return res.status(400).json({ erro: 'Email já cadastrado' });
-
-    const hash = await bcrypt.hash(senha, 10);
-    const novoUsuario = await Usuario.create({ nome, email, senha: hash });
-
-    return res.status(201).json({
-      message: 'Usuário cadastrado com sucesso',
-      usuario: {
-        id: novoUsuario.id,
-        nome: novoUsuario.nome,
-        email: novoUsuario.email
+      const usuarioExistente = await Usuario.findOne({ where: { email } });
+      if (usuarioExistente) {
+        return res.status(400).json({ erro: "Email já cadastrado." });
       }
-    });
-  } catch (err) {
-    return res.status(500).json({ erro: 'Erro ao cadastrar usuário', detalhe: err.message });
-  }
+
+      const senha_hash = await bcrypt.hash(senha, 10);
+
+      const novoUsuario = await Usuario.create({
+        nome,
+        email,
+        senha_hash,
+      });
+
+      const token = jwt.sign(
+        {
+          id: novoUsuario.id,
+          nome: novoUsuario.nome,
+          email: novoUsuario.email,
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: "2h" }
+      );
+
+      res.status(201).json({
+        usuario: {
+          id: novoUsuario.id,
+          nome: novoUsuario.nome,
+          email: novoUsuario.email,
+        },
+        token: token,
+      });
+    } catch (error) {
+      console.error("Erro no cadastro:", error);
+      console.log("🔥 error.response:", error.response);
+      console.log("🔥 error.response?.data:", error.response?.data);
+    }
+  },
+//nao mexer daqui pra cima
+  async login(req, res) {
+    try {
+      const { email, senha } = req.body;
+
+      const usuario = await Usuario.findOne({ where: { email } });
+      if (!usuario) {
+        return res.status(401).json({ erro: "Usuário não encontrado" });
+      }
+
+      const senhaValida = await bcrypt.compare(senha, usuario.senha_hash);
+      if (!senhaValida) {
+        return res.status(401).json({ erro: "Senha incorreta" });
+      }
+
+      const token = jwt.sign(
+        { id: usuario.id, nome: usuario.nome, email: usuario.email },
+        process.env.JWT_SECRET,
+        { expiresIn: "2h" }
+      );
+
+      res.json({
+        token,
+        usuario: { id: usuario.id, nome: usuario.nome, email: usuario.email },
+      });
+    } catch (error) {
+      res.status(500).json({ erro: "Erro no login", detalhe: error.message });
+    }
+  },
 };
 
-const login = async (req, res) => {
-  const { email, senha } = req.body;
-
-  try {
-    const usuario = await Usuario.findOne({ where: { email } });
-    if (!usuario) return res.status(404).json({ erro: 'Usuário não encontrado' });
-
-    const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
-    if (!senhaCorreta) return res.status(401).json({ erro: 'Senha incorreta' });
-
-    const token = jwt.sign(
-      { id: usuario.id, email: usuario.email },
-      JWT_SECRET,
-      { expiresIn: '2h' }
-    );
-
-    return res.json({
-      message: 'Login bem-sucedido',
-      token,
-      usuario: {
-        id: usuario.id,
-        nome: usuario.nome,
-        email: usuario.email
-      }
-    });
-  } catch (err) {
-    return res.status(500).json({ erro: 'Erro no login', detalhe: err.message });
-  }
-};
-
-module.exports = { cadastrar, login };
+module.exports = usuarioController;
