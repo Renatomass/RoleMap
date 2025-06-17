@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useUser } from "../context/UseContext";
 import PageWrapper from "../components/PageWrapper";
-import socket from "../services/sockets";
+import socket from "../services/socket";
 
 export default function SalaEspera() {
   const { codigoSala, nomeRole } = useUser();

@@ -12,6 +12,7 @@ import Resultado from "../pages/Resultado";
 import Final from "../pages/Final";
 import CodeRoom from "../pages/CodeRoom";
 import SalaEspera from "../pages/SalaEspera";
+import Sala from "../pages/Sala";
 
 export default function AppRoutes(){
     return(
@@ -29,6 +30,7 @@ export default function AppRoutes(){
                 <Route path="/esperando" element={<Esperando />}/>
                 <Route path="/resultado" element={<Resultado />}/>
                 <Route path="/final" element={<Final />}/>
+                <Route path="/sala/:codigo/:apelido" element={<Sala />} />
             </Routes>
     );
 }
