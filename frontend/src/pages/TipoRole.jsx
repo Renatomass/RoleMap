@@ -89,7 +89,7 @@ export default function TipoRole() {
           distancia: `${distancia}km`,
           preco: preco === 0 ? "baixo" : preco === 3 ? "médio" : "alto",
           avaliacao_minima: nota.toString(),
-          localizacao_host: localizacao
+          localizacao
         },
         {
           headers: {

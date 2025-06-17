@@ -10,13 +10,14 @@ const criarSala = async (req, res) => {
     const { localizacao } = req.body;
     console.log("Recebido no back:", req.body.localizacao_host);
 
-
     if (!hostId) {
       return res.status(401).json({ erro: "Usuário não autenticado" });
     }
 
     if (!localizacao) {
-      return res.status(400).json({ erro: "Localização do host é obrigatória" });
+      return res
+        .status(400)
+        .json({ erro: "Localização do host é obrigatória" });
     }
 
     const codigo = gerarCodigo();
@@ -25,15 +26,17 @@ const criarSala = async (req, res) => {
       nome: `Role do(a) ${nomeHost}`,
       host_id: hostId,
       codigo,
-      localizacao_host: localizacao || 'nao_recebida',
-      total_convidados: 0,
+      localizacao_host: localizacao || "nao_recebida",
+      total_convidados,
       total_votos: 0,
     });
 
     res.status(201).json({ codigo, salaId: sala.id });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ erro: "Erro ao criar sala", detalhe: error.message });
+    res
+      .status(500)
+      .json({ erro: "Erro ao criar sala", detalhe: error.message });
   }
 };
 
@@ -46,8 +49,15 @@ const criarRole = async (req, res) => {
       return res.status(401).json({ erro: "Usuário não autenticado" });
     }
 
-    const { nome_role, tipo_role, palavras_chave, distancia, preco, avaliacao_minima, localizacao } = req.body;
-
+    const {
+      nome_role,
+      tipo_role,
+      palavras_chave,
+      distancia,
+      preco,
+      avaliacao_minima,
+      localizacao,
+    } = req.body;
 
     const codigo = gerarCodigo();
 
@@ -61,13 +71,13 @@ const criarRole = async (req, res) => {
     });
 
     const sala = await Sala.create({
-      nome:nome_role || `Rolê de ${nomeHost}`,
+      nome: nome_role || `Rolê de ${nomeHost}`,
       host_id: hostId,
       codigo,
       pref_id: preferencia.id,
-      total_convidados: 0,
+      total_convidados,
       total_votos: 0,
-      localizacao_host: localizacao
+      localizacao_host: localizacao,
     });
 
     return res.status(201).json({
@@ -79,21 +89,26 @@ const criarRole = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ erro: "Erro ao criar rolê", detalhe: error.message });
+    return res
+      .status(500)
+      .json({ erro: "Erro ao criar rolê", detalhe: error.message });
   }
 };
 
 function calcularCentroGeografico(coordenadas) {
   const total = coordenadas.length;
-  const soma = coordenadas.reduce((acc, loc) => {
-    acc.lat += loc.latitude;
-    acc.lon += loc.longitude;
-    return acc;
-  }, { lat: 0, lon: 0 });
+  const soma = coordenadas.reduce(
+    (acc, loc) => {
+      acc.lat += loc.latitude;
+      acc.lon += loc.longitude;
+      return acc;
+    },
+    { lat: 0, lon: 0 }
+  );
 
   return {
     latitude: soma.lat / total,
-    longitude: soma.lon / total
+    longitude: soma.lon / total,
   };
 }
 
@@ -102,7 +117,7 @@ const gerarSugestao = async (req, res) => {
     const { salaId } = req.body;
 
     const sala = await Sala.findByPk(salaId, {
-      include: [{ model: Preferencia, as: "preferencia" }]
+      include: [{ model: Preferencia, as: "preferencia" }],
     });
 
     if (!sala) return res.status(404).json({ erro: "Sala não encontrada" });
@@ -114,13 +129,19 @@ const gerarSugestao = async (req, res) => {
 
     if (host.localizacao) {
       const [lat, lon] = host.localizacao.split(",");
-      todasLocalizacoes.push({ latitude: parseFloat(lat), longitude: parseFloat(lon) });
+      todasLocalizacoes.push({
+        latitude: parseFloat(lat),
+        longitude: parseFloat(lon),
+      });
     }
 
-    convidados.forEach(c => {
+    convidados.forEach((c) => {
       if (c.localizacao) {
         const [lat, lon] = c.localizacao.split(",");
-        todasLocalizacoes.push({ latitude: parseFloat(lat), longitude: parseFloat(lon) });
+        todasLocalizacoes.push({
+          latitude: parseFloat(lat),
+          longitude: parseFloat(lon),
+        });
       }
     });
 
@@ -138,47 +159,52 @@ const gerarSugestao = async (req, res) => {
     return res.status(200).json({
       pontoMedio,
       preferencias,
-      sugestao: respostaGemini
+      sugestao: respostaGemini,
     });
-
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ erro: "Erro ao gerar sugestões", detalhe: error.message });
+    return res
+      .status(500)
+      .json({ erro: "Erro ao gerar sugestões", detalhe: error.message });
   }
 };
 
-
 const entrarComoConvidado = async (req, res) => {
   try {
-    const {nome, codigo, localizacao} = req.body;
+    const { nome, codigo, localizacao } = req.body;
 
-    if (!nome || !codigo){
-      return res.status(400).json({ erro: 'Nome e código da sala são obrigatórios'});
-      }
+    if (!nome || !codigo) {
+      return res
+        .status(400)
+        .json({ erro: "Nome e código da sala são obrigatórios" });
+    }
 
-      const sala = await Sala.findOne ({ where: {codigo}});
+    const sala = await Sala.findOne({ where: { codigo } });
 
-      if (!sala){
-        return res.status(404).json ({ erro: ' Sala não encontrada '})
-      }
+    if (!sala) {
+      return res.status(404).json({ erro: " Sala não encontrada " });
+    }
 
-      const convidado = await Convidado.create({
-        nome,
-        codigo_ref: codigo,
-        sala_id: sala.id,
-        localizacao: req.body.localizacao
-       });
+    const convidado = await Convidado.create({
+      nome,
+      cod_ref: codigo,
+      sala_id: sala.id,
+      localizacao: req.body.localizacao,
+    });
 
-       res.status(201).json({
-        mensagem: `${convidado.nome} entrou na sala `,
-        convidadoId: convidado.id,
-        salaId: sala.id,
-        nomeSala: sala.nome
-       });
+    await Sala.increment('total_convidados', { by: 1, where: { id: sala.id } });
 
+    res.status(201).json({
+      mensagem: `${convidado.nome} entrou na sala `,
+      convidadoId: convidado.id,
+      salaId: sala.id,
+      nomeSala: sala.nome,
+    });
   } catch (error) {
     console.error(error);
-      res.status(500).json({erro: 'Erro ao tentar entra na sala', detalhe: error.message});
+    res
+      .status(500)
+      .json({ erro: "Erro ao tentar entra na sala", detalhe: error.message });
   }
 };
 
@@ -186,5 +212,5 @@ module.exports = {
   criarSala,
   criarRole,
   gerarSugestao,
-  entrarComoConvidado
-}
+  entrarComoConvidado,
+};
