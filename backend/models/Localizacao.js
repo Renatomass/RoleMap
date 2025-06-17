@@ -1,7 +1,7 @@
 // backend/models/Localizacao.js
-const mongoose = require('mongoose');
+const mySQl = require('mySQl');
 
-const localizacaoSchema = new mongoose.Schema({
+const localizacaoSchema = new mySQl.Schema({
   codigoSala: { type: String, required: true },
   participanteId: { type: String, required: true },
   latitude: { type: Number, required: true },
@@ -9,4 +9,4 @@ const localizacaoSchema = new mongoose.Schema({
   atualizadoEm: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model('Localizacao', localizacaoSchema);
+module.exports = mySQl.model('Localizacao', localizacaoSchema);
