@@ -8,6 +8,8 @@ const criarSala = async (req, res) => {
     const hostId = req.usuario?.id;
     const nomeHost = req.usuario?.nome;
     const { localizacao } = req.body;
+    console.log("Recebido no back:", req.body.localizacao_host);
+
 
     if (!hostId) {
       return res.status(401).json({ erro: "Usuário não autenticado" });
@@ -23,7 +25,7 @@ const criarSala = async (req, res) => {
       nome: `Role do(a) ${nomeHost}`,
       host_id: hostId,
       codigo,
-      localizacao_host: localizacao,
+      localizacao_host: localizacao || 'nao_recebida',
       total_convidados: 0,
       total_votos: 0,
     });
@@ -44,7 +46,7 @@ const criarRole = async (req, res) => {
       return res.status(401).json({ erro: "Usuário não autenticado" });
     }
 
-    const { nome_role, tipo_role, palavras_chave, distancia, preco, avaliacao_minima } = req.body;
+    const { nome_role, tipo_role, palavras_chave, distancia, preco, avaliacao_minima, localizacao } = req.body;
 
 
     const codigo = gerarCodigo();
@@ -65,6 +67,7 @@ const criarRole = async (req, res) => {
       pref_id: preferencia.id,
       total_convidados: 0,
       total_votos: 0,
+      localizacao_host: localizacao
     });
 
     return res.status(201).json({
@@ -183,6 +186,5 @@ module.exports = {
   criarSala,
   criarRole,
   gerarSugestao,
-  entrarComoConvidado,
-  gerarSugestao
+  entrarComoConvidado
 }

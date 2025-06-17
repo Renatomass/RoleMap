@@ -18,7 +18,9 @@ module.exports = (sequelize, DataTypes) => {
     avaliacao_minima: DataTypes.STRING,
     preco: DataTypes.STRING,
     codigo_gerado: DataTypes.STRING,
-    convidado_id: DataTypes.INTEGER
+    convidado_id: DataTypes.INTEGER,
+    localizacao_host: DataTypes.STRING,
+
   }, {
     sequelize,
     modelName: 'Preferencia',

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useUser } from "../context/UseContext";
 import { useNavigate } from "react-router-dom";
+import { api } from "../services/api";
 import img01 from "../assets/cerveja.svg";
 import img02 from "../assets/dance.svg";
 import img03 from "../assets/drink.svg";
@@ -12,7 +13,7 @@ import SliderFiltro from "../components/SliderFilter";
 import InputText from "../components/InputText";
 import BtnPrincipal from "../components/BtnPrincipal";
 import socket from "../services/sockets";
-import { api } from "../services/api";
+import LocalHostGps from "../components/LocalHostGps";
 
 export default function TipoRole() {
   const [categoriaSelecionada, setCategoriaSelecionada] = useState(null);
@@ -20,19 +21,22 @@ export default function TipoRole() {
   const [preco, setPreco] = useState(2);
   const [nota, setNota] = useState(4);
   const [keywords, setKeywords] = useState("");
-  const { setCodigoSala, setNomeRole, nomeRole, user } = useUser();
+  const { setCodigoSala, setNomeRole, nomeRole, user, localizacao } = useUser();
+  const [mostrarPopupLocal, setMostrarPopupLocal] = useState(true);
   const navigate = useNavigate();
   const nomeHost = user?.name || "Host";
+
+
 
   const categorias = [img01, img02, img03, img04, img05];
 
   const mapaCategorias = {
-  0: "cerveja",
-  1: "balada",
-  2: "drink casual",
-  3: "pizza",
-  4: "sushi"
-};
+    0: "cerveja",
+    1: "balada",
+    2: "drink casual",
+    3: "pizza",
+    4: "sushi",
+  };
 
   const aleatorizarFiltros = () => {
     const categoriaAleatoria = Math.floor(Math.random() * categorias.length);
@@ -69,29 +73,36 @@ export default function TipoRole() {
   };
 
   const handleCriarRole = async () => {
-    if (!user || !user.token){
+    if (!user || !user.token) {
       alert("Você precisa esta logado para criar role.");
       return;
     }
     try {
-      const nomeFinal = nomeRole.trim() || `Rolê do(a) ${nomeHost} `;
-      const response = await api.post("/sala/criar-sala", {
-        nome: nomeFinal,
-        tipo_role: mapaCategorias[categoriaSelecionada],
-        palavras_chave: keywords,
-        distancia: `${distancia}km`,
-        preco: preco === 0 ? "baixo" : preco === 3 ? "médio" : "alto",
-        avaliacao_minima: nota.toString(),
-      }, {
-        headers: {
-          Authorization: `Bearer ${user.token}`
+      const nomeFinal = nomeRole || `Rolê do(a) ${nomeHost}`;
+      console.log("Localização enviada:", localizacao);
+      const response = await api.post(
+        "/sala/criar-sala",
+        {
+          nome_role: nomeFinal,
+          tipo_role: mapaCategorias[categoriaSelecionada],
+          palavras_chave: keywords,
+          distancia: `${distancia}km`,
+          preco: preco === 0 ? "baixo" : preco === 3 ? "médio" : "alto",
+          avaliacao_minima: nota.toString(),
+          localizacao_host: localizacao
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
         }
-      });
+      );
 
-      const { codigo, nomeSala, salaId } = response.data;
+      const { codigo, nomeRole: nomeSala } = response.data;
 
       setCodigoSala(codigo);
-      setNomeRole(nomeSala);
+      setNomeRole(nomeFinal);
+      localStorage.setItem("nomeRole", nomeFinal);
 
       const apelido =
         user?.nome || prompt("Digite seu nome para entrar na sala:");
@@ -108,6 +119,16 @@ export default function TipoRole() {
 
   return (
     <PageWrapper>
+      {mostrarPopupLocal && (
+        <LocalHostGps
+          animar={true}
+          onConfirmar={() => setMostrarPopupLocal(false)}
+          onCancelar={() => {
+            setMostrarPopupLocal(false);
+          }}
+        />
+      )}
+
       <div className="relative">
         <h1 className="w-full mt-12 mb-12 text-5xl font-bold text-center font-pdr">
           Tipo de Rolê:
@@ -129,9 +150,9 @@ export default function TipoRole() {
             label="Distância"
             icon={<span className="text-xl">📍</span>}
             value={distancia}
-            min={0}
+            min={1}
             max={50}
-            step={5}
+            step={2}
             onChange={(e) => setDistancia(Number(e.target.value))}
           />
           <SliderFiltro
@@ -147,7 +168,7 @@ export default function TipoRole() {
             label="Classificação"
             icon={<span className="text-yellow-400">⭐</span>}
             value={nota}
-            min={0}
+            min={1}
             max={5}
             step={1}
             onChange={(e) => setNota(Number(e.target.value))}

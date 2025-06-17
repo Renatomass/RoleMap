@@ -4,25 +4,43 @@ import PageWrapper from "../components/PageWrapper";
 import socket from "../services/sockets";
 
 export default function SalaEspera() {
-  const { codigo, nomeRole } = useUser();
+  const { codigoSala, nomeRole, setNomeRole } = useUser();
   const [participantes, setParticipantes] = useState([]);
 
   useEffect(() => {
-    if (codigo) {
-      // Solicita lista inicial ao servidor
-      socket.emit("listar_participantes", codigo);
+    if (!nomeRole) {
+      const nomeSalvo = localStorage.getItem("nomeRole");
+      if (nomeSalvo) {
+        setNomeRole(nomeSalvo);
+      }
     }
+  }, []);
 
-    socket.on("atualizar_participantes", (lista) => {
-      setParticipantes(lista);
-    });
+  useEffect(() => {
+    if (codigoSala) {
+      socket.emit("listar_participantes", codigoSala);
 
-    return () => {
-      socket.off("atualizar_participantes");
-    };
-  }, [codigo]);
+      socket.on("atualizar_participantes", (lista) => {
+        console.log("Participantes recebidos:", lista);
+        setParticipantes(lista);
+      });
 
-  if (!codigo) {
+      return () => {
+        socket.off("atualizar_participantes");
+      };
+    }
+  }, [codigoSala]);
+
+  useEffect(() => {
+    if (participantes.length > 0 && codigoSala) {
+      socket.emit("quantidade_participantes", {
+        codigo: codigoSala,
+        total_convidados: participantes.length,
+      });
+    }
+  }, [participantes]);
+
+  if (!codigoSala) {
     return (
       <PageWrapper>
         <div className="text-white text-center mt-10">
@@ -34,9 +52,11 @@ export default function SalaEspera() {
 
   return (
     <PageWrapper>
-      <div className="text-white text-center flex flex-col items-center gap-6 mt-10">
+      <div className="text-white text-center flex flex-col items-center gap-6 -mt-16">
         <h1 className="text-3xl font-bold">⏳ Sala de Espera</h1>
-        <h2 className="text-xl font-semibold">Rolê: {nomeRole}</h2>
+        <h2 className="text-xl font-semibold bg-purple-800 px-4 py-2 rounded-xl shadow-md">
+          Rolê: {nomeRole}
+        </h2>
 
         <div className="text-sm text-white/70">
           Amigos na sala: {participantes.length}

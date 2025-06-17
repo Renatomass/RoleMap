@@ -5,6 +5,7 @@ const salaController = require('../controllers/salaController');
 
 router.post('/criar', auth, salaController.criarSala);
 router.post('/criar-sala', auth, salaController.criarRole);
+router.post('/criar-role', auth, salaController.criarRole);
 router.post('/entrar', salaController.entrarComoConvidado);
 router.post("/sugestao", salaController.gerarSugestao);
         

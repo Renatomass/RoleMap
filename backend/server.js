@@ -4,9 +4,16 @@ const http = require('http');
 const { Server } = require('socket.io');
 const salaRoutes = require('./routes/salaRoutes');
 const usuarioRoutes = require('./routes/usuarioRoutes');
+require('dotenv').config();
+const db = require('./models');
+
 
 const app = express();
 const server = http.createServer(app);
+
+db.sequelize.authenticate()
+  .then(() => console.log('✅ Banco de dados conectado'))
+  .catch((err) => console.error('Erro ao conectar ao banco:', err));
 
 const io = new Server(server, {
   cors: { origin: "*" }
@@ -21,8 +28,10 @@ io.on("connection", (socket) => {
     socket.join(codigo);
 
     if (!salas[codigo]) salas[codigo] = [];
-    salas[codigo].push(apelido);
 
+    if (!salas[codigo].some((p) => p.id === socket.id)) {
+      salas[codigo].push({ id: socket.id, apelido });
+    }
     io.to(codigo).emit("atualizar_participantes", salas[codigo]);
   });
 
@@ -31,6 +40,20 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
+    console.log("❌ Usuário desconectado:", socket.id);
+
+    for (const codigo in salas) {
+      const antes = salas[codigo].length;
+      salas[codigo] = salas[codigo].filter((p) => p.id !== socket.id);
+
+      if (salas[codigo].length !== antes) {
+        if (salas[codigo].length === 0) {
+          delete salas[codigo];
+        }
+
+        io.to(codigo).emit("atualizar_participantes", salas[codigo]);
+      }
+    }
   });
 });
 
@@ -42,10 +65,6 @@ app.use("/usuarios", usuarioRoutes);
 
 app.get('/', (_req, res) => {
   res.send('Servidor está vivo! 🚀');
-});
-
-io.on("connection", (socket) => {
-  console.log("🔌 Novo usuário conectado:", socket.id);
 });
 
 const PORT = 3001;
