@@ -1,5 +1,6 @@
 const axios = require("axios");
 require("dotenv").config();
+const { parseGeminiResposta } = require("./parseGeminiResposta.js");
 
 function calcularDistanciaKm(origem, destino) {
   const toRad = (grau) => (grau * Math.PI) / 180;
@@ -39,29 +40,6 @@ function extrairCoordenadas(link) {
 }
 
 
-function extrairCampo(texto, campos) {
-  const listaCampos = Array.isArray(campos) ? campos : [campos];
-
-  for (const campo of listaCampos) {
-    const regex = new RegExp(`\\*\\*${campo}:\\*\\*\\s*(.*)`, "i");
-    const match = texto.match(regex);
-    if (match) return match[1].trim();
-  }
-
-  return "";
-}
-
-function parseRespostaGemini(texto) {
-  return {
-    nome: extrairCampo(texto, "Nome do local"),
-    descricao: extrairCampo(texto, "Descrição curta"),
-    motivo: extrairCampo(texto, "Motivo da escolha"),
-    distancia: extrairCampo(texto, ["Distancia","Distancia"]),
-    nota: extrairCampo(texto, ["Nota", "Nota do Estabelecimento"]),
-    link: extrairCampo(texto, "Link do Google Maps"),
-  };
-}
-
 async function consultarGemini(prompt, pontoMedio) {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error("❌ API Key do Gemini não encontrada.");
@@ -80,7 +58,7 @@ async function consultarGemini(prompt, pontoMedio) {
 
   console.log("🟢 Resposta crua do Gemini:", texto);
 
-  const resultado = parseRespostaGemini(texto);
+  const resultado = parseGeminiResposta(texto);
 
     const coords = extrairCoordenadas(resultado.link);
   if (coords) {

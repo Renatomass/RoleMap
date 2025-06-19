@@ -22,7 +22,7 @@ Dados do grupo:
 - **Distancia:** [Distancia do ponto medio para o local sugerido]
 - **Nota:** [número de 0 a 5 com base no Google]
 - **Link:** [endereço completo do local no Google Maps]
-- **Imagem do local (URL real de imagem):**
+- **Imagem:** [URL real de imagem do local]
 
 Atenção:
 - Não invente lugares fictícios.

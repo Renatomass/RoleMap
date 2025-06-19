@@ -4,6 +4,8 @@ import PageWrapper from "../components/PageWrapper";
 import CardLocal from "../components/CardLocal";
 import Feedback from "../components/Feedback";
 import ModalDigaAlgo from "../components/ModalDigaAlgo";
+import placeholderImg from "../assets/restaurante.jpg";
+
 
 export default function ResultadoRole() {
   const [mostrarModalDiga, setMostrarModalDiga] = useState(false);
@@ -31,7 +33,7 @@ export default function ResultadoRole() {
         descricao={sugestao?.descricao}
         motivo={sugestao?.motivo}
         link={sugestao?.link}
-        imagem="https://source.unsplash.com/400x300/?bar,night" // imagem genérica
+        imagem={sugestao?.imagem || placeholderImg}
         nota={sugestao?.nota}
         distancia={sugestao?.distancia ? `${sugestao.distancia} ` : ""}
       />
