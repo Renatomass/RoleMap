@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { useUser } from "../context/UseContext";
 import PageWrapper from "../components/PageWrapper";
 import socket from "../services/sockets";
+import PopupBuscando from "../components/PopupBuscando"; 
 
 export default function SalaEspera() {
   const { codigoSala, nomeRole, setNomeRole } = useUser();
   const [participantes, setParticipantes] = useState([]);
+  const [buscando, setBuscando] = useState(false);
 
   useEffect(() => {
     if (!nomeRole) {
@@ -15,6 +17,17 @@ export default function SalaEspera() {
       }
     }
   }, []);
+
+  useEffect(() => {
+  socket.on("mostrar_popup_busca", () => {
+    console.log("🔄 Recebido: mostrar_popup_busca");
+    setBuscando(true);
+  });
+
+  return () => {
+    socket.off("mostrar_popup_busca");
+  };
+}, []);
 
   useEffect(() => {
     if (codigoSala) {

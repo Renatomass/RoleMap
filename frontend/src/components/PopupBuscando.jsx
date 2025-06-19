@@ -9,6 +9,7 @@ export default function PopupBuscando({ mostrar }) {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!mostrar) return;
     const buscarSugestao = async () => {
       if (!salaId) return;
 
@@ -27,8 +28,9 @@ export default function PopupBuscando({ mostrar }) {
     };
 
     buscarSugestao();
-  }, [salaId, navigate, setSugestaoFinal]);
+  }, [mostrar, salaId, navigate, setSugestaoFinal]);
 
+    if (!mostrar) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">

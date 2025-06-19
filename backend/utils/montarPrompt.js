@@ -21,7 +21,8 @@ Dados do grupo:
 - **Motivo da escolha:** [resuma em uma frase o motivo da escolha]
 - **Distancia:** [Distancia do ponto medio para o local sugerido]
 - **Nota:** [número de 0 a 5 com base no Google]
-- **Link:** [link direto para o local no Google Maps]
+- **Link:** [endereço completo do local no Google Maps]
+- **Imagem do local (URL real de imagem):**
 
 Atenção:
 - Não invente lugares fictícios.

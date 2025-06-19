@@ -3,13 +3,15 @@ import PageWrapper from "../components/PageWrapper";
 import BtnPrincipal from "../components/BtnPrincipal";
 import PopupBuscando from "../components/PopupBuscando";
 import { useState } from "react";
+import socket from "../services/sockets";
 
 export default function CodeRoom() {
-  const { codigoSala } = useUser();
+  const { codigoSala, salaId } = useUser();
 
   const [buscando, setBuscando] = useState(false);
   const iniciarBusca = () => {
     setBuscando(true);
+    socket.emit("iniciar_busca", { salaId })
   };
 
   const copiarCodigo = () => {
@@ -36,7 +38,7 @@ export default function CodeRoom() {
           </BtnPrincipal>
         </div>
       </div>
-      <PopupBuscando mostrar={buscando} />
+      {buscando && <PopupBuscando mostrar={buscando} />}
     </PageWrapper>
   );
 }

@@ -19,6 +19,8 @@ function parseGeminiResposta(texto) {
     distancia: extrairCampo(texto, ["Distancia","Distancia"]),
     nota: extrairCampo(texto, ["Nota", "Nota do Estabelecimento"]),
     link: extrairCampo(texto, "Link"),
+    imagem: extrairCampo(texto, ["Imagem", "Imagem do local"]),
+
   };
 }
 
