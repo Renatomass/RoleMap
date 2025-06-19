@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/UseContext";
 import PageWrapper from "../components/PageWrapper";
 import BtnPrincipal from "../components/BtnPrincipal";
@@ -6,16 +5,11 @@ import PopupBuscando from "../components/PopupBuscando";
 import { useState } from "react";
 
 export default function CodeRoom() {
-  const navigate = useNavigate();
   const { codigoSala } = useUser();
 
   const [buscando, setBuscando] = useState(false);
   const iniciarBusca = () => {
     setBuscando(true);
-    setTimeout(() => {
-      setBuscando(false);
-      navigate("/resultado");
-    }, 3000);
   };
 
   const copiarCodigo = () => {

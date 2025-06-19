@@ -4,15 +4,13 @@ import PageWrapper from "../components/PageWrapper";
 import CardLocal from "../components/CardLocal";
 import Feedback from "../components/Feedback";
 import ModalDigaAlgo from "../components/ModalDigaAlgo";
-import { parseGeminiResposta } from "../utils/parseGeminiResposta";
 
 export default function ResultadoRole() {
   const [mostrarModalDiga, setMostrarModalDiga] = useState(false);
 
   const { sugestaoFinal } = useUser();
-  const sugestaoTratada = parseGeminiResposta(sugestaoFinal?.sugestao || "");
-  console.log("🧠 sugestaoFinal:", sugestaoFinal?.sugestao);
-  console.log("🎯 sugestaoTratada:", sugestaoTratada);
+  const sugestao = sugestaoFinal?.sugestao;
+  console.log("🧠 sugestaoFinal:", sugestaoFinal);
 
   const handleEnviarMensagem = (mensagem) => {
     console.log("Mensagem enviada:", mensagem);
@@ -29,10 +27,10 @@ export default function ResultadoRole() {
   return (
     <PageWrapper>
       <CardLocal
-        nome={sugestaoTratada.nome}
-        descricao={sugestaoTratada.descricao}
-        motivo={sugestaoTratada.motivo}
-        link={sugestaoTratada.link}
+        nome={sugestao?.nome}
+        descricao={sugestao?.descricao}
+        motivo={sugestao?.motivo}
+        link={sugestao?.link}
         imagem="https://source.unsplash.com/400x300/?bar,night" // imagem genérica
         nota={4.5}
         distancia="1km"

@@ -10,7 +10,7 @@ import { api } from "../services/api";
 export default function EntrarSala() {
   const [codigo, setCodigo] = useState("");
   const navigate = useNavigate();
-  const { setCodigoSala, setNomeRole, nomeConvidado, localizacao } = useUser();
+  const { setCodigoSala, setNomeRole, nomeConvidado, localizacao, setSalaId } = useUser();
 
   const entrarNaSala = async () => {
     try {
@@ -24,6 +24,7 @@ export default function EntrarSala() {
 
 
        if (response.status === 201 && salaId) {
+        setSalaId(salaId);
         setNomeRole(nomeRole);
         setCodigoSala(codigo.trim());
 

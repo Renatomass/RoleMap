@@ -10,7 +10,7 @@ export default function PopupBuscando({ mostrar }) {
 
   useEffect(() => {
     const buscarSugestao = async () => {
-      if (!mostrar || !salaId) return;
+      if (!salaId) return;
 
       try {
         const response = await api.post("/sala/sugestao", {
@@ -27,9 +27,8 @@ export default function PopupBuscando({ mostrar }) {
     };
 
     buscarSugestao();
-  }, [mostrar, salaId]);
+  }, [salaId, navigate, setSugestaoFinal]);
 
-  if (!mostrar) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
