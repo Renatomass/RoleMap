@@ -56,7 +56,7 @@ function parseRespostaGemini(texto) {
     nome: extrairCampo(texto, "Nome do local"),
     descricao: extrairCampo(texto, "Descrição curta"),
     motivo: extrairCampo(texto, "Motivo da escolha"),
-    distancia: extrairCampo(texto, "Distancia"),
+    distancia: extrairCampo(texto, ["Distancia","Distancia"]),
     nota: extrairCampo(texto, ["Nota", "Nota do Estabelecimento"]),
     link: extrairCampo(texto, "Link do Google Maps"),
   };

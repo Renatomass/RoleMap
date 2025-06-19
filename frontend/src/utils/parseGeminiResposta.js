@@ -1,14 +1,25 @@
-export function parseGeminiResposta(texto) {
+function extrairCampo(texto, campos) {
+  const listaCampos = Array.isArray(campos) ? campos : [campos];
+
+  for (const campo of listaCampos) {
+    const regex = new RegExp(`\\*\\*${campo}:\\*\\*\\s*(.*)`, "i");
+    const match = texto.match(regex);
+    if (match) return match[1].trim();
+  }
+
+  return "";
+}
+
+
+function parseGeminiResposta(texto) {
   return {
     nome: extrairCampo(texto, "Nome do local"),
     descricao: extrairCampo(texto, "Descrição curta"),
     motivo: extrairCampo(texto, "Motivo da escolha"),
-    link: extrairCampo(texto, "Link do Google Maps"),
+    distancia: extrairCampo(texto, ["Distancia","Distancia"]),
+    nota: extrairCampo(texto, ["Nota", "Nota do Estabelecimento"]),
+    link: extrairCampo(texto, "Link"),
   };
 }
 
-function extrairCampo(texto, campo) {
-  const regex = new RegExp(`\\*\\*${campo}:\\*\\*\\s*(.*)`, "i");
-  const match = texto.match(regex);
-  return match ? match[1].trim() : "❌ Campo não encontrado";
-}
+module.exports = { parseGeminiResposta };

@@ -83,7 +83,7 @@ export default function CardLocal({
             </button>
           </div>
         ) : (
-          <div className="flex abosolute justify-center items-start mt-4">
+          <div className="flex absolute justify-center items-start mt-4">
             <div className="flex items-center gap-3 bg-[#ffffff22] px-4 py-2 rounded-xl shadow-inner">
               <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
               <span className="text-sm font-semibold text-white">
