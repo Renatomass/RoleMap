@@ -2,7 +2,6 @@ const gerarCodigo = require("../utils/gerarCodigo");
 const { Sala, Preferencia, Convidado, Usuario } = require("../models");
 const montarPrompt = require("../utils/montarPrompt");
 const consultarGemini = require("../utils/consultarGemini");
-const parseGeminiResposta = require("../utils/parseGeminiResposta");
 
 const criarSala = async (req, res) => {
   try {
@@ -144,8 +143,8 @@ const gerarSugestao = async (req, res) => {
     const preferencias = sala.preferencia;
 
     const promptFinal = montarPrompt({ pontoMedio, preferencias });
-    const respostaTexto = await consultarGemini(promptFinal);
-    const sugestao = parseGeminiResposta(respostaTexto);
+    const sugestao = await consultarGemini(promptFinal);
+
 
     return res.status(200).json({
       pontoMedio,

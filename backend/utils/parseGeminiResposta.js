@@ -1,18 +1,24 @@
-function parseGeminiResposta(texto) {
-  const nomeMatch = texto.match(/\*{2}Nome do local:\*{2}\s*(.+)/);
-  const descMatch = texto.match(/\*{2}Descrição curta:\*{2}\s*(.+)/);
-  const motivoMatch = texto.match(/\*{2}Motivo da escolha:\*{2}\s*(.+)/);
-  const linkMatch = texto.match(/\*{2}Link do Google Maps.*:\*{2}\s*(.+)/);
+function extrairCampo(texto, campos) {
+  const listaCampos = Array.isArray(campos) ? campos : [campos];
 
+  for (const campo of listaCampos) {
+    const regex = new RegExp(`\\*\\*${campo}:\\*\\*\\s*(.*)`, "i");
+    const match = texto.match(regex);
+    if (match) return match[1].trim();
+  }
+
+  return "";
+}
+
+
+function parseGeminiResposta(texto) {
   return {
-    nome: nomeMatch?.[1]?.trim() || "Local secreto",
-    descricao: descMatch?.[1]?.trim() || "",
-    motivo: motivoMatch?.[1]?.trim() || "",
-    imagem: "https://source.unsplash.com/400x300/?restaurant", // placeholder
-    distancia: "2km",
-    nota: 4.5,
-    link: linkMatch?.[1]?.trim() || "",
+    nome: extrairCampo(texto, "Nome do local"),
+    descricao: extrairCampo(texto, "Descrição curta"),
+    motivo: extrairCampo(texto, "Motivo da escolha"),
+    nota: extrairCampo(texto, ["Nota", "Nota do Estabelecimento"]),
+    link: extrairCampo(texto, "Link"),
   };
 }
 
-module.exports = parseGeminiResposta;
+module.exports = { parseGeminiResposta };

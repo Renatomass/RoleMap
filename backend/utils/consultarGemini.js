@@ -13,11 +13,11 @@ function parseRespostaGemini(texto) {
     nome: extrairCampo(texto, "Nome do local"),
     descricao: extrairCampo(texto, "Descrição curta"),
     motivo: extrairCampo(texto, "Motivo da escolha"),
+    nota: extrairCampo(texto, "Nota Estabelecimento"),
     link: extrairCampo(texto, "Link do Google Maps"),
   };
 }
 
-// 🔥 Consulta e transforma o resultado
 async function consultarGemini(prompt) {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error("❌ API Key do Gemini não encontrada.");

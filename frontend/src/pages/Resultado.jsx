@@ -32,7 +32,7 @@ export default function ResultadoRole() {
         motivo={sugestao?.motivo}
         link={sugestao?.link}
         imagem="https://source.unsplash.com/400x300/?bar,night" // imagem genérica
-        nota={4.5}
+        nota={sugestao?.nota}
         distancia="1km"
       />
 

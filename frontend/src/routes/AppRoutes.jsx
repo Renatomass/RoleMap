@@ -6,7 +6,6 @@ import Cadastro from "../pages/Cadastro";
 import UserSala from "../pages/UserSala";
 import TipoRole from "../pages/TipoRole";
 import EntrarSala from "../pages/EntrarSala";
-import Esperando from "../pages/Esperando";
 import Preferencias from "../pages/Preferencias";
 import Resultado from "../pages/Resultado";
 import Final from "../pages/Final";
@@ -26,7 +25,6 @@ export default function AppRoutes(){
                 <Route path="/sala/convidado" element={<EntrarSala />}/>
                 <Route path="/CodeRoom" element={<CodeRoom />}/>
                 <Route path="/preferencias" element={<Preferencias />}/>
-                <Route path="/esperando" element={<Esperando />}/>
                 <Route path="/resultado" element={<Resultado />}/>
                 <Route path="/final" element={<Final />}/>
             </Routes>

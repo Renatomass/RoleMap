@@ -10,7 +10,9 @@ export default function CardLocal({
   motivo = "",
   link = "",
   imagem = "https://source.unsplash.com/400x300/?restaurant",
-    distancia = "1km",
+  distancia = "1km",
+  nota = 0
+
 }) {
   const [mostrarModalAceito, setMostrarModalAceito] = useState(false);
   const [mostrarModalRecusado, setMostrarModalRecusado] = useState(false);
