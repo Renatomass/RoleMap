@@ -19,7 +19,6 @@ module.exports = (sequelize, DataTypes) => {
     preco: DataTypes.STRING,
     codigo_gerado: DataTypes.STRING,
     convidado_id: DataTypes.INTEGER,
-    localizacao_host: DataTypes.STRING,
 
   }, {
     sequelize,

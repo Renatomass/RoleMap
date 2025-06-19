@@ -1,11 +1,18 @@
 import { useState } from "react";
+import { useUser } from "../context/UseContext";
 import PageWrapper from "../components/PageWrapper";
 import CardLocal from "../components/CardLocal";
 import Feedback from "../components/Feedback";
 import ModalDigaAlgo from "../components/ModalDigaAlgo";
+import { parseGeminiResposta } from "../utils/parseGeminiResposta";
 
 export default function ResultadoRole() {
   const [mostrarModalDiga, setMostrarModalDiga] = useState(false);
+
+  const { sugestaoFinal } = useUser();
+  const sugestaoTratada = parseGeminiResposta(sugestaoFinal?.sugestao || "");
+  console.log("🧠 sugestaoFinal:", sugestaoFinal?.sugestao);
+  console.log("🎯 sugestaoTratada:", sugestaoTratada);
 
   const handleEnviarMensagem = (mensagem) => {
     console.log("Mensagem enviada:", mensagem);
@@ -22,10 +29,13 @@ export default function ResultadoRole() {
   return (
     <PageWrapper>
       <CardLocal
-        nome="Bistrô Solar"
-        imagem="../assets/restaurante.jpg"
+        nome={sugestaoTratada.nome}
+        descricao={sugestaoTratada.descricao}
+        motivo={sugestaoTratada.motivo}
+        link={sugestaoTratada.link}
+        imagem="https://source.unsplash.com/400x300/?bar,night" // imagem genérica
         nota={4.5}
-        distancia="1,8km"
+        distancia="1km"
       />
 
       <div className="mt-4 text-center">

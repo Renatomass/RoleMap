@@ -1,7 +1,7 @@
+
 function montarPrompt({ pontoMedio, preferencias }) {
   const { latitude, longitude } = pontoMedio;
   const {
-    nome_role,
     tipo_role,
     palavras_chave,
     distancia,
@@ -9,7 +9,7 @@ function montarPrompt({ pontoMedio, preferencias }) {
     avaliacao_minima,
   } = preferencias;
 
-  return `
+  const promptFinal = `
   Você é um especialista em recomendação de locais.
 
   A missão: sugerir um local ideal para um rolê.
@@ -17,7 +17,6 @@ function montarPrompt({ pontoMedio, preferencias }) {
   Dados do grupo:
   - Localização média: Latitude ${latitude}, Longitude ${longitude}
   - Tipo de rolê: ${tipo_role}
-  - Nome do rolê: ${nome_role}
   - Palavras-chave: ${palavras_chave}
   - Distância máxima: ${distancia}
   - Preço desejado: ${preco}
@@ -28,9 +27,13 @@ function montarPrompt({ pontoMedio, preferencias }) {
 - **Descrição curta:**
 - **Motivo da escolha:**
 - **Link do Google Maps (ou especifique o nome completo e endereço para busca):**
-- **Contato se disponível (telefone, site, Instagram etc):**
 
-Seja objetivo, profissional e útil como um consultor de locais. Não invente locais fictícios. Use nomes reais e relevantes para o Brasil.`.trim();
+
+Seja objetivo, profissional e útil como um consultor de locais. Não invente locais fictícios. Use nomes reais e relevantes para o Brasil.
+  `.trim();
+
+  console.log("🟡 Prompt final para o Gemini:\n", promptFinal);
+
+  return promptFinal;
 }
-
-module.exports = montarPrompt; 
+module.exports = montarPrompt;

@@ -4,12 +4,25 @@ import ModalRecusado from "./ModalRecusado";
 import ModalNaoVotou from "./ModalNaoVotou";
 import Timer from "./Timer";
 
-export default function CardLocal({ imagem, nome, nota, distancia }) {
+export default function CardLocal({ nome, descricao, motivo, link, imagem, nota, distancia }) {
+  console.log("🎯 Sugestão recebida no Card:", sugestao);
   const [mostrarModalAceito, setMostrarModalAceito] = useState(false);
   const [mostrarModalRecusado, setMostrarModalRecusado] = useState(false);
   const [mostrarModalNaoVotou, setMostrarModalNaoVotou] = useState(false);
   const [votou, setVotou] = useState(false);
   const [votoEmProgresso, setVotoEmProgresso] = useState("");
+
+ const {
+  nome = "Local secreto",
+  descricao = "",
+  motivo = "",
+  imagem = "https://source.unsplash.com/400x300/?restaurant",
+  distancia = "1km",
+  nota = 4.5,
+  link = ""
+} = sugestao || {};
+
+
 
   const handleAlerta = () => {
     if (!votou) {

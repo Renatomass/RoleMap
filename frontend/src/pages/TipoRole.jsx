@@ -21,7 +21,7 @@ export default function TipoRole() {
   const [preco, setPreco] = useState(2);
   const [nota, setNota] = useState(4);
   const [keywords, setKeywords] = useState("");
-  const { setCodigoSala, setNomeRole, nomeRole, user, localizacao } = useUser();
+  const { setCodigoSala, setNomeRole, nomeRole, user, localizacao, setSalaId } = useUser();
   const [mostrarPopupLocal, setMostrarPopupLocal] = useState(true);
   const navigate = useNavigate();
   const nomeHost = user?.name || "Host";
@@ -98,9 +98,10 @@ export default function TipoRole() {
         }
       );
 
-      const { codigo, nomeRole: nomeSala } = response.data;
+      const { codigo, salaId } = response.data;
 
       setCodigoSala(codigo);
+      setSalaId(salaId);
       setNomeRole(nomeFinal);
       localStorage.setItem("nomeRole", nomeFinal);
 
