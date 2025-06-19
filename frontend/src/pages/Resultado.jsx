@@ -33,7 +33,7 @@ export default function ResultadoRole() {
         link={sugestao?.link}
         imagem="https://source.unsplash.com/400x300/?bar,night" // imagem genérica
         nota={sugestao?.nota}
-        distancia="1km"
+        distancia={sugestao?.distancia ? `${sugestao.distancia} km` : ""}
       />
 
       <div className="mt-4 text-center">

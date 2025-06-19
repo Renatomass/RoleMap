@@ -1,11 +1,54 @@
 const axios = require("axios");
 require("dotenv").config();
 
-// 🟡 Utilitário para extrair dados da resposta bruta
-function extrairCampo(texto, campo) {
-  const regex = new RegExp(`\\*\\*${campo}:\\*\\*\\s*(.+)`);
-  const match = texto.match(regex);
-  return match ? match[1].trim() : "";
+function calcularDistanciaKm(origem, destino) {
+  const toRad = (grau) => (grau * Math.PI) / 180;
+  const R = 6371; // raio médio da Terra em km
+
+  const dLat = toRad(destino.latitude - origem.latitude);
+  const dLon = toRad(destino.longitude - origem.longitude);
+
+  const lat1 = toRad(origem.latitude);
+  const lat2 = toRad(destino.latitude);
+
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.sin(dLon / 2) ** 2 * Math.cos(lat1) * Math.cos(lat2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  return R * c;
+}
+
+function extrairCoordenadas(link) {
+  if (!link) return null;
+
+  const regexAt = /@(-?\d+\.\d+),(-?\d+\.\d+)/;
+  const regexQ = /[?&]q=(-?\d+\.\d+),(-?\d+\.\d+)/;
+
+  let match = link.match(regexAt);
+  if (match) {
+    return { latitude: parseFloat(match[1]), longitude: parseFloat(match[2]) };
+  }
+
+  match = link.match(regexQ);
+  if (match) {
+    return { latitude: parseFloat(match[1]), longitude: parseFloat(match[2]) };
+  }
+
+  return null;
+}
+
+
+function extrairCampo(texto, campos) {
+  const listaCampos = Array.isArray(campos) ? campos : [campos];
+
+  for (const campo of listaCampos) {
+    const regex = new RegExp(`\\*\\*${campo}:\\*\\*\\s*(.*)`, "i");
+    const match = texto.match(regex);
+    if (match) return match[1].trim();
+  }
+
+  return "";
 }
 
 function parseRespostaGemini(texto) {
@@ -13,12 +56,13 @@ function parseRespostaGemini(texto) {
     nome: extrairCampo(texto, "Nome do local"),
     descricao: extrairCampo(texto, "Descrição curta"),
     motivo: extrairCampo(texto, "Motivo da escolha"),
-    nota: extrairCampo(texto, "Nota Estabelecimento"),
+    distancia: extrairCampo(texto, "Distancia"),
+    nota: extrairCampo(texto, ["Nota", "Nota do Estabelecimento"]),
     link: extrairCampo(texto, "Link do Google Maps"),
   };
 }
 
-async function consultarGemini(prompt) {
+async function consultarGemini(prompt, pontoMedio) {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error("❌ API Key do Gemini não encontrada.");
 
@@ -37,6 +81,16 @@ async function consultarGemini(prompt) {
   console.log("🟢 Resposta crua do Gemini:", texto);
 
   const resultado = parseRespostaGemini(texto);
+
+    const coords = extrairCoordenadas(resultado.link);
+  if (coords) {
+    resultado.latitude = coords.latitude;
+    resultado.longitude = coords.longitude;
+    if (pontoMedio) {
+      resultado.distancia = calcularDistanciaKm(pontoMedio, coords).toFixed(2);
+    }
+  }
+
   console.log("📦 Sugestão estruturada:", resultado);
 
   return resultado;

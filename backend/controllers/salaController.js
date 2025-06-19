@@ -143,7 +143,8 @@ const gerarSugestao = async (req, res) => {
     const preferencias = sala.preferencia;
 
     const promptFinal = montarPrompt({ pontoMedio, preferencias });
-    const sugestao = await consultarGemini(promptFinal);
+    const sugestao = await consultarGemini(promptFinal, pontoMedio);
+    
 
 
     return res.status(200).json({
