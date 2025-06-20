@@ -11,6 +11,7 @@ function extrairCampo(texto, campos) {
 }
 
 function parseGeminiResposta(texto) {
+  
   return {
     nome: extrairCampo(texto, "Nome do local"),
     descricao: extrairCampo(texto, "Descrição curta"),
@@ -18,7 +19,12 @@ function parseGeminiResposta(texto) {
     distancia: extrairCampo(texto, "Distancia"),
     nota: extrairCampo(texto, ["Nota", "Nota do Estabelecimento"]),
     link: extrairCampo(texto, "Link"),
-    imagem: extrairCampo(texto, ["Imagem", "Imagem do local"]),
+    imagem: extrairCampo(texto, [
+      "Imagem",
+      "Imagem do local",
+      "Imagem do local (URL real de imagem)",
+      "Imagem do estabelecimento",
+    ]),
   };
 }
 

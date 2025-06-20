@@ -1,5 +1,5 @@
 const axios = require('axios');
-require('dotenv').config(); // Garante que a variável de ambiente está disponível
+require('dotenv').config(); 
 
 exports.getRespostaGemini = async (prompt) => {
   try {
@@ -16,7 +16,7 @@ exports.getRespostaGemini = async (prompt) => {
     );
 
     const texto = response.data.candidates[0].content.parts[0].text;
-    return JSON.parse(texto); // Certifique-se de que o modelo retorna JSON válido!
+    return JSON.parse(texto); 
   } catch (error) {
     console.error("❌ Erro ao chamar Gemini:", error.message);
     throw error;

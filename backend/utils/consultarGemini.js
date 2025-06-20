@@ -4,7 +4,7 @@ const { parseGeminiResposta } = require("./parseGeminiResposta.js");
 
 function calcularDistanciaKm(origem, destino) {
   const toRad = (grau) => (grau * Math.PI) / 180;
-  const R = 6371; // raio médio da Terra em km
+  const R = 6371; 
 
   const dLat = toRad(destino.latitude - origem.latitude);
   const dLon = toRad(destino.longitude - origem.longitude);

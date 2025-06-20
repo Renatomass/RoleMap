@@ -6,7 +6,6 @@ import Feedback from "../components/Feedback";
 import ModalDigaAlgo from "../components/ModalDigaAlgo";
 import placeholderImg from "../assets/restaurante.jpg";
 
-
 export default function ResultadoRole() {
   const [mostrarModalDiga, setMostrarModalDiga] = useState(false);
 
