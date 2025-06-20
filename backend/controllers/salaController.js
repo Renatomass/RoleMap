@@ -14,7 +14,9 @@ const criarSala = async (req, res) => {
     }
 
     if (!localizacao) {
-      return res.status(400).json({ erro: "Localização do host é obrigatória" });
+      return res
+        .status(400)
+        .json({ erro: "Localização do host é obrigatória" });
     }
 
     const codigo = gerarCodigo();
@@ -24,14 +26,31 @@ const criarSala = async (req, res) => {
       host_id: hostId,
       codigo,
       localizacao_host: localizacao,
-      total_convidados: 0,
+      total_convidados: 1,
       total_votos: 0,
     });
 
-    res.status(201).json({ codigo, salaId: sala.id });
+    const convidadoHost = await Convidado.create({
+      nome: nomeHost,
+      cod_ref: codigo,
+      sala_id: sala.id,
+      localizacao,
+    });
+
+    res
+      .status(201)
+      .json({ codigo, salaId: sala.id, convidadoId: convidadoHost.id });
+
+    await Sala.increment("total_convidados", { by: 1, where: { id: sala.id } });
+
+    res
+      .status(201)
+      .json({ codigo, salaId: sala.id, convidadoId: hostConvidado.id });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ erro: "Erro ao criar sala", detalhe: error.message });
+    res
+      .status(500)
+      .json({ erro: "Erro ao criar sala", detalhe: error.message });
   }
 };
 
@@ -70,10 +89,19 @@ const criarRole = async (req, res) => {
       host_id: hostId,
       codigo,
       pref_id: preferencia.id,
-      total_convidados: 0,
+      total_convidados: 1,
       total_votos: 0,
       localizacao_host: localizacao,
     });
+
+    const convidadoHost = await Convidado.create({
+      nome: nomeHost,
+      cod_ref: codigo,
+      sala_id: sala.id,
+      localizacao,
+    });
+
+    await Sala.increment("total_convidados", { by: 1, where: { id: sala.id } });
 
     return res.status(201).json({
       mensagem: "Rolê criado com sucesso!",
@@ -81,10 +109,13 @@ const criarRole = async (req, res) => {
       salaId: sala.id,
       nomeSala: sala.nome,
       preferencia,
+      convidadoId: convidadoHost.id,
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ erro: "Erro ao criar rolê", detalhe: error.message });
+    return res
+      .status(500)
+      .json({ erro: "Erro ao criar rolê", detalhe: error.message });
   }
 };
 
@@ -144,8 +175,6 @@ const gerarSugestao = async (req, res) => {
 
     const promptFinal = montarPrompt({ pontoMedio, preferencias });
     const sugestao = await consultarGemini(promptFinal, pontoMedio);
-    
-
 
     return res.status(200).json({
       pontoMedio,
@@ -154,7 +183,9 @@ const gerarSugestao = async (req, res) => {
     });
   } catch (error) {
     console.error("❌ Erro interno ao gerar sugestão:", error);
-    return res.status(500).json({ erro: "Erro ao gerar sugestões", detalhe: error.message });
+    return res
+      .status(500)
+      .json({ erro: "Erro ao gerar sugestões", detalhe: error.message });
   }
 };
 
@@ -163,7 +194,9 @@ const entrarComoConvidado = async (req, res) => {
     const { nome, codigo, localizacao } = req.body;
 
     if (!nome || !codigo) {
-      return res.status(400).json({ erro: "Nome e código da sala são obrigatórios" });
+      return res
+        .status(400)
+        .json({ erro: "Nome e código da sala são obrigatórios" });
     }
 
     const sala = await Sala.findOne({ where: { codigo } });
@@ -179,7 +212,7 @@ const entrarComoConvidado = async (req, res) => {
       localizacao,
     });
 
-    await Sala.increment('total_convidados', { by: 1, where: { id: sala.id } });
+    await Sala.increment("total_convidados", { by: 1, where: { id: sala.id } });
 
     res.status(201).json({
       mensagem: `${convidado.nome} entrou na sala`,
@@ -189,7 +222,9 @@ const entrarComoConvidado = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ erro: "Erro ao tentar entrar na sala", detalhe: error.message });
+    res
+      .status(500)
+      .json({ erro: "Erro ao tentar entrar na sala", detalhe: error.message });
   }
 };
 
@@ -198,7 +233,9 @@ const votar = async (req, res) => {
     const { convidadoId, voto } = req.body;
 
     if (!convidadoId || !voto) {
-      return res.status(400).json({ erro: "convidadoId e voto são obrigatórios" });
+      return res
+        .status(400)
+        .json({ erro: "convidadoId e voto são obrigatórios" });
     }
 
     const convidado = await Convidado.findByPk(convidadoId);
@@ -209,11 +246,15 @@ const votar = async (req, res) => {
     convidado.voto = voto;
     await convidado.save();
 
-    await Sala.increment("total_votos", { by: 1, where: { id: convidado.sala_id } });
+    await Sala.increment("total_votos", {
+      by: 1,
+      where: { id: convidado.sala_id },
+    });
 
     const io = req.app.get("io");
     if (io) {
       io.to(convidado.cod_ref).emit("novo_voto", {
+        id: convidado.id,
         nome: convidado.nome,
         voto,
       });
@@ -222,10 +263,33 @@ const votar = async (req, res) => {
     res.status(200).json({ mensagem: "Voto registrado" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ erro: "Erro ao registrar voto", detalhe: error.message });
+    res
+      .status(500)
+      .json({ erro: "Erro ao registrar voto", detalhe: error.message });
   }
 };
 
+const listarVotos = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({ erro: "ID da sala não informado" });
+    }
+
+    const votos = await Convidado.findAll({
+      where: { sala_id: id },
+      attributes: ["nome", "voto"],
+    });
+
+    return res.status(200).json(votos);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ erro: "Erro ao listar votos", detalhe: error.message });
+  }
+};
 
 module.exports = {
   criarSala,
@@ -233,4 +297,5 @@ module.exports = {
   gerarSugestao,
   entrarComoConvidado,
   votar,
+  listarVotos,
 };

@@ -21,12 +21,18 @@ export default function TipoRole() {
   const [preco, setPreco] = useState(2);
   const [nota, setNota] = useState(4);
   const [keywords, setKeywords] = useState("");
-  const { setCodigoSala, setNomeRole, nomeRole, user, localizacao, setSalaId } = useUser();
+  const {
+    setCodigoSala,
+    setNomeRole,
+    nomeRole,
+    user,
+    localizacao,
+    setSalaId,
+    setConvidadoId,
+  } = useUser();
   const [mostrarPopupLocal, setMostrarPopupLocal] = useState(true);
   const navigate = useNavigate();
   const nomeHost = user?.name || "Host";
-
-
 
   const categorias = [img01, img02, img03, img04, img05];
 
@@ -89,7 +95,7 @@ export default function TipoRole() {
           distancia: `${distancia}km`,
           preco: preco === 0 ? "baixo" : preco === 3 ? "médio" : "alto",
           avaliacao_minima: nota.toString(),
-          localizacao
+          localizacao,
         },
         {
           headers: {
@@ -98,11 +104,14 @@ export default function TipoRole() {
         }
       );
 
-      const { codigo, salaId } = response.data;
+      const { codigo, salaId, convidadoId } = response.data;
 
       setCodigoSala(codigo);
       setSalaId(salaId);
       setNomeRole(nomeFinal);
+      if (convidadoId) {
+      setConvidadoId(convidadoId);
+      }
       localStorage.setItem("nomeRole", nomeFinal);
 
       const apelido =

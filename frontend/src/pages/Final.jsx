@@ -2,6 +2,7 @@ import PageWrapper from "../components/PageWrapper";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { useUser } from "../context/UseContext";
+import { api } from "../services/api";
 
 export default function ResultadoFinal() {
   const navigate = useNavigate();
@@ -9,8 +10,12 @@ export default function ResultadoFinal() {
   const params = new URLSearchParams(location.search);
   const votacaoFinalizada = params.get("resultado") === "true";
 
-  const { votos, sugestaoFinal } = useUser();
+  const { votos, sugestaoFinal, salaId, setVotos, convidadoId } = useUser();
   const lugar = sugestaoFinal?.sugestao;
+
+  const votosSim = votos.filter((v) => v.voto === "sim").length;
+  const votosNao = votos.filter((v) => v.voto === "nao").length;
+  const maioriaSim = votosSim >= votosNao;
 
   useEffect(() => {
     if (!votacaoFinalizada) {
@@ -18,13 +23,27 @@ export default function ResultadoFinal() {
     }
   }, [votacaoFinalizada, navigate]);
 
+  useEffect(() => {
+    const obterVotos = async () => {
+      if (!salaId) return;
+      try {
+        const resposta = await api.get(`/sala/${salaId}/votos`);
+        setVotos(resposta.data);
+      } catch (err) {
+        console.error("Erro ao buscar votos:", err);
+      }
+    };
+    obterVotos();
+  }, [salaId, setVotos]);
+
   return (
     <PageWrapper>
       <div className="text-center text-white sm:mt-6 mt-14 mb-4 px-4">
         <h1 className="text-3xl font-bold">🎉 Resultado da Votação</h1>
         <p className="text-base text-gray-300 mt-1">
-          A maioria decidiu por esse rolê! <br /> Aproveite e marque com a
-          galera. 🗓️
+            {maioriaSim
+            ? "A maioria decidiu por esse rolê!"
+            : "A maioria decidiu não ir nesse rolê."}
         </p>
       </div>
 
@@ -37,11 +56,14 @@ export default function ResultadoFinal() {
         />
 
         <div className="relative z-10 flex flex-col items-center justify-end h-full px-6 pb-2">
-          <h2 className="text-2xl font-bold drop-shadow-md text-center">{lugar?.nome || "Local escolhido"}
+          <h2 className="text-2xl font-bold drop-shadow-md text-center">
+            {lugar?.nome || "Local escolhido"}
           </h2>
           <div className="flex justify-center w-full px-0 text-base font-bold text-purple-200 mt-1">
             <span className="flex items-center gap-1">⭐ {lugar?.nota}</span>
-            <span className="flex items-center gap-1">📍 {lugar?.distancia}</span>
+            <span className="flex items-center gap-1">
+              📍 {lugar?.distancia}
+            </span>
           </div>
         </div>
       </div>
@@ -50,11 +72,18 @@ export default function ResultadoFinal() {
         <div className="bg-[#ffffff1a] rounded-xl p-4 w-full max-w-sm mb-2">
           <h3 className="text-lg font-bold mb-2">Votos dos amigos:</h3>
           <div className="grid grid-cols-2 gap-x-2 gap-y-2">
-            {votos.map((amigo, i) => (
-              <div key={i} className="text-sm text-left">
-                <span className="font-semibold text-white">{amigo.nome}:</span> {amigo.voto === "sim" ? "✅ Aceitou " : "❌ Recusou "}
-              </div>
-            ))}
+            {votos.map((amigo, i) => {
+              const ehUsuario = amigo.id === convidadoId;
+              return (
+                <div key={i} className="text-sm text-left">
+                  <span className="font-semibold text-white">
+                    {amigo.nome}
+                    {ehUsuario ? " (você)" : ""}:
+                  </span>
+                  {amigo.voto === "sim" ? "✅ Aceitou " : "❌ Recusou "}
+                </div>
+              );
+            })}
           </div>
         </div>
 

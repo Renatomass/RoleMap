@@ -10,9 +10,9 @@ export default function BtnUser(){
         <>
         <BtnVoltar/>
         <div className="absolute top-5 left-20 flex items-center gap-2 z-10">
-                    <div className="flex w-12 h-12 bg-gray-200 rounded-full justify-center items-center text-3xl drop-shadow-black">💀</div>
-                        <span className="text-lg font-bold">
-                            {nomeUser}</span>
+        <div className="flex w-12 h-12 bg-gray-200 rounded-full justify-center items-center text-3xl text-purple-400 drop-shadow-black">{nomeUser.charAt(0)}</div>                        
+        <span className="text-lg font-bold">
+        {nomeUser}</span>
         </div>
         </>
     );
