@@ -37,15 +37,11 @@ const criarSala = async (req, res) => {
       localizacao,
     });
 
-    res
+      await Sala.increment("total_convidados", { by: 1, where: { id: sala.id } });
+
+    return res
       .status(201)
       .json({ codigo, salaId: sala.id, convidadoId: convidadoHost.id });
-
-    await Sala.increment("total_convidados", { by: 1, where: { id: sala.id } });
-
-    res
-      .status(201)
-      .json({ codigo, salaId: sala.id, convidadoId: hostConvidado.id });
   } catch (error) {
     console.error(error);
     res

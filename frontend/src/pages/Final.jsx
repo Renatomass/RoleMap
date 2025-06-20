@@ -89,7 +89,10 @@ export default function ResultadoFinal() {
 
         <div className="flex flex-row sm:flex-row gap-4">
           <button
-            onClick={() => window.open("https://www.google.com/maps", "_blank")}
+            onClick={() => {
+              const nome = encodeURIComponent(lugar?.nome || "");
+              window.open(`https://www.google.com/maps/search/${nome}`, "_blank");
+            }}
             className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl cursor-pointer font-bold shadow-md transition-transform transform hover:scale-105"
           >
             📍 Ver no mapa

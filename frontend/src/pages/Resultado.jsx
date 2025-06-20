@@ -6,11 +6,14 @@ import CardLocal from "../components/CardLocal";
 import Feedback from "../components/Feedback";
 import ModalDigaAlgo from "../components/ModalDigaAlgo";
 import placeholderImg from "../assets/restaurante.jpg";
+import { api } from "../services/api";
+
+
 
 export default function ResultadoRole() {
   const [mostrarModalDiga, setMostrarModalDiga] = useState(false);
 
-  const { sugestaoFinal, votos, setVotos, codigoSala } = useUser();
+  const { sugestaoFinal, votos, setVotos, codigoSala, salaId } = useUser();
   const sugestao = sugestaoFinal?.sugestao;
   console.log("🧠 sugestaoFinal:", sugestaoFinal);
 
@@ -31,6 +34,19 @@ export default function ResultadoRole() {
       socket.off("novo_voto", receberVoto);
     };
   }, [codigoSala, setVotos]);
+
+  useEffect(() => {
+    const obterVotos = async () => {
+      if (!salaId) return;
+      try {
+        const resposta = await api.get(`/sala/${salaId}/votos`);
+        setVotos(resposta.data);
+      } catch (err) {
+        console.error("Erro ao buscar votos:", err);
+      }
+    };
+    obterVotos();
+  }, [salaId, setVotos]);
 
   const amigos = [
     { nome: "João", msg: "Cuida!" },
