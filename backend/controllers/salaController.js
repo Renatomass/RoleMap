@@ -193,9 +193,44 @@ const entrarComoConvidado = async (req, res) => {
   }
 };
 
+const votar = async (req, res) => {
+  try {
+    const { convidadoId, voto } = req.body;
+
+    if (!convidadoId || !voto) {
+      return res.status(400).json({ erro: "convidadoId e voto são obrigatórios" });
+    }
+
+    const convidado = await Convidado.findByPk(convidadoId);
+    if (!convidado) {
+      return res.status(404).json({ erro: "Convidado não encontrado" });
+    }
+
+    convidado.voto = voto;
+    await convidado.save();
+
+    await Sala.increment("total_votos", { by: 1, where: { id: convidado.sala_id } });
+
+    const io = req.app.get("io");
+    if (io) {
+      io.to(convidado.cod_ref).emit("novo_voto", {
+        nome: convidado.nome,
+        voto,
+      });
+    }
+
+    res.status(200).json({ mensagem: "Voto registrado" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ erro: "Erro ao registrar voto", detalhe: error.message });
+  }
+};
+
+
 module.exports = {
   criarSala,
   criarRole,
   gerarSugestao,
   entrarComoConvidado,
+  votar,
 };

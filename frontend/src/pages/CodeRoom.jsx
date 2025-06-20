@@ -11,7 +11,7 @@ export default function CodeRoom() {
   const [buscando, setBuscando] = useState(false);
   const iniciarBusca = () => {
     setBuscando(true);
-    socket.emit("iniciar_busca", { salaId })
+    socket.emit("iniciar_busca", { codigo: codigoSala, salaId });
   };
 
   const copiarCodigo = () => {

@@ -1,3 +1,4 @@
+
 function extrairCampo(texto, campos) {
   const listaCampos = Array.isArray(campos) ? campos : [campos];
 
@@ -11,7 +12,14 @@ function extrairCampo(texto, campos) {
 }
 
 function parseGeminiResposta(texto) {
-  
+  const placeholderImg = "../assets/restaurante.jpg";
+  const imagemExtraida = extrairCampo(texto, [
+    "Imagem",
+    "Imagem do local",
+    "Imagem do local (URL real de imagem)",
+    "Imagem do estabelecimento",
+  ]);
+
   return {
     nome: extrairCampo(texto, "Nome do local"),
     descricao: extrairCampo(texto, "Descrição curta"),
@@ -19,12 +27,7 @@ function parseGeminiResposta(texto) {
     distancia: extrairCampo(texto, "Distancia"),
     nota: extrairCampo(texto, ["Nota", "Nota do Estabelecimento"]),
     link: extrairCampo(texto, "Link"),
-    imagem: extrairCampo(texto, [
-      "Imagem",
-      "Imagem do local",
-      "Imagem do local (URL real de imagem)",
-      "Imagem do estabelecimento",
-    ]),
+    imagem: imagemExtraida || placeholderImg
   };
 }
 

@@ -16,8 +16,11 @@ db.sequelize.authenticate()
   .catch((err) => console.error('Erro ao conectar ao banco:', err));
 
 const io = new Server(server, {
-  cors: { origin: "*" }
+  cors: { origin: "*" },
 });
+
+app.set("io", io);
+
 
 const salas = {};
 
@@ -37,6 +40,14 @@ io.on("connection", (socket) => {
 
   socket.on("listar_participantes", (codigo) => {
     io.to(socket.id).emit("atualizar_participantes", salas[codigo] || []);
+  });
+
+   socket.on("iniciar_busca", ({ codigo }) => {
+    io.to(codigo).emit("mostrar_popup_busca");
+  });
+
+  socket.on("enviar_sugestao", ({ codigo, sugestao }) => {
+    io.to(codigo).emit("nova_sugestao", sugestao);
   });
 
   socket.on("disconnect", () => {

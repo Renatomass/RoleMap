@@ -2,12 +2,16 @@ import { useEffect, useState } from "react";
 import { useUser } from "../context/UseContext";
 import PageWrapper from "../components/PageWrapper";
 import socket from "../services/sockets";
-import PopupBuscando from "../components/PopupBuscando"; 
+import PopupBuscando from "../components/PopupBuscando";
+import { useNavigate } from "react-router-dom";
+
 
 export default function SalaEspera() {
-  const { codigoSala, nomeRole, setNomeRole } = useUser();
+  const { codigoSala, nomeRole, setNomeRole, setSugestaoFinal } = useUser();
   const [participantes, setParticipantes] = useState([]);
   const [buscando, setBuscando] = useState(false);
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     if (!nomeRole) {
@@ -28,6 +32,18 @@ export default function SalaEspera() {
     socket.off("mostrar_popup_busca");
   };
 }, []);
+
+
+  useEffect(() => {
+    socket.on("nova_sugestao", (dados) => {
+      setSugestaoFinal(dados);
+      navigate("/resultado");
+    });
+    return () => {
+      socket.off("nova_sugestao");
+    };
+  }, [navigate, setSugestaoFinal]);
+
 
   useEffect(() => {
     if (codigoSala) {

@@ -3,6 +3,8 @@ import ModalAceito from "./ModalAceite";
 import ModalRecusado from "./ModalRecusado";
 import ModalNaoVotou from "./ModalNaoVotou";
 import Timer from "./Timer";
+import { useUser } from "../context/UseContext";
+import { api } from "../services/api";
 
 export default function CardLocal({
   nome = "Local secreto",
@@ -11,8 +13,7 @@ export default function CardLocal({
   link = "",
   imagem = "https://source.unsplash.com/400x300/?restaurant",
   distancia = "1km",
-  nota = 0
-
+  nota = 0,
 }) {
   const [mostrarModalAceito, setMostrarModalAceito] = useState(false);
   const [mostrarModalRecusado, setMostrarModalRecusado] = useState(false);
@@ -20,27 +21,44 @@ export default function CardLocal({
   const [votou, setVotou] = useState(false);
   const [votoEmProgresso, setVotoEmProgresso] = useState("");
 
+  const { convidadoId } = useUser();
+
+  const registrarVoto = async (resposta) => {
+    if (!convidadoId) return;
+    try {
+      await api.post("/sala/votar", {
+        convidadoId,
+        voto: resposta,
+      });
+    } catch (err) {
+      console.error("Erro ao enviar voto", err);
+    }
+  };
+
   const handleAlerta = () => {
     if (!votou) {
       setMostrarModalNaoVotou(true);
     }
   };
 
-  const votarAceitar = () => {
+  const votarAceitar = async () => {
     setVotou(true);
     setVotoEmProgresso("aceito");
+    await registrarVoto("sim");
     setMostrarModalAceito(true);
   };
 
-  const votarRecusar = () => {
+  const votarRecusar = async () => {
     setVotou(true);
     setVotoEmProgresso("recusado");
+    await registrarVoto("nao");
     setMostrarModalRecusado(true);
   };
 
-  const votarNoPopup = (aceitou) => {
+  const votarNoPopup = async (aceitou) => {
     setVotou(true);
     setVotoEmProgresso(aceitou ? "aceito" : "recusado");
+    await registrarVoto(aceitou ? "sim" : "nao");
     setMostrarModalNaoVotou(false);
     if (aceitou) {
       setMostrarModalAceito(true);
@@ -61,7 +79,9 @@ export default function CardLocal({
       <div className="relative z-10 px-4 pt-4 pb-6">
         <Timer tempoInicial={30} onAlerta={handleAlerta} />
         <div className="relative mt-50">
-          <h2 className="flex justify-center text-2xl px-2 font-bold drop-shadow-md">{nome}</h2>
+          <h2 className="flex justify-center text-2xl px-2 font-bold drop-shadow-md">
+            {nome}
+          </h2>
           <div className="flex justify-center px-3 text-base font-pdr font-bold text-purple-200 my-1.5">
             <span className="flex items-center gap-1">⭐ {nota}</span>
             <span className="flex items-center gap-1">📍{distancia}</span>

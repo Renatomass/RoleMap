@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useUser } from "../context/UseContext";
+import socket from "../services/sockets";
 import PageWrapper from "../components/PageWrapper";
 import CardLocal from "../components/CardLocal";
 import Feedback from "../components/Feedback";
@@ -9,7 +10,7 @@ import placeholderImg from "../assets/restaurante.jpg";
 export default function ResultadoRole() {
   const [mostrarModalDiga, setMostrarModalDiga] = useState(false);
 
-  const { sugestaoFinal } = useUser();
+  const { sugestaoFinal, votos, setVotos, codigoSala } = useUser();
   const sugestao = sugestaoFinal?.sugestao;
   console.log("🧠 sugestaoFinal:", sugestaoFinal);
 
@@ -17,6 +18,19 @@ export default function ResultadoRole() {
     console.log("Mensagem enviada:", mensagem);
     setMostrarModalDiga(false);
   };
+
+    useEffect(() => {
+    const receberVoto = (info) => {
+      setVotos((prev) => [...prev, info]);
+    };
+    socket.on("novo_voto", receberVoto);
+    if (codigoSala) {
+      socket.emit("entrar_na_sala", { codigo: codigoSala });
+    }
+    return () => {
+      socket.off("novo_voto", receberVoto);
+    };
+  }, [codigoSala, setVotos]);
 
   const amigos = [
     { nome: "João", msg: "Cuida!" },

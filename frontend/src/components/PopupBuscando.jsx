@@ -3,9 +3,10 @@ import { useEffect } from "react";
 import { useUser } from "../context/UseContext";
 import { useNavigate } from "react-router-dom";
 import { api } from "../services/api";
+import socket from "../services/sockets";
 
 export default function PopupBuscando({ mostrar }) {
-  const { salaId, setSugestaoFinal } = useUser();
+  const { salaId, codigoSala, setSugestaoFinal } = useUser();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,6 +22,10 @@ export default function PopupBuscando({ mostrar }) {
         console.log("📦 Resposta Gemini:", response.data);
 
         setSugestaoFinal(response.data);
+        socket.emit("enviar_sugestao", {
+          codigo: codigoSala,
+          sugestao: response.data,
+        });
         navigate("/resultado");
       } catch (error) {
         console.error("❌ Erro ao buscar sugestão:", error);
@@ -30,7 +35,7 @@ export default function PopupBuscando({ mostrar }) {
     buscarSugestao();
   }, [mostrar, salaId, navigate, setSugestaoFinal]);
 
-    if (!mostrar) return null;
+  if (!mostrar) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
@@ -43,4 +48,3 @@ export default function PopupBuscando({ mostrar }) {
     </div>
   );
 }
-

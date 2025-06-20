@@ -8,5 +8,7 @@ router.post('/criar-sala', auth, salaController.criarRole);
 router.post('/criar-role', auth, salaController.criarRole);
 router.post('/entrar', salaController.entrarComoConvidado);
 router.post("/sugestao", salaController.gerarSugestao);
+router.post("/votar", salaController.votar);
+
         
 module.exports = router;

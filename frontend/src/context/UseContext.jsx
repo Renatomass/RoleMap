@@ -8,8 +8,11 @@ export function UserProvider({ children }) {
   const [salaId, setSalaId] = useState(null);
   const [nomeRole, setNomeRole] = useState("");
   const [nomeConvidado, setNomeConvidado] = useState("");
+  const [convidadoId, setConvidadoId] = useState(null);
   const [localizacao, setLocalizacao] = useState("");
   const [sugestaoFinal, setSugestaoFinal] = useState(null);
+  const [votos, setVotos] = useState([]);
+
 
   const logout = () => {
     setUser(null);
@@ -27,12 +30,16 @@ export function UserProvider({ children }) {
         setNomeRole,
         nomeConvidado,
         setNomeConvidado,
+        convidadoId,
+        setConvidadoId,
         localizacao,
         setLocalizacao,
         sugestaoFinal,
         setSugestaoFinal,
         salaId,
         setSalaId,
+        votos,
+        setVotos,
       }}
     >
       {children}

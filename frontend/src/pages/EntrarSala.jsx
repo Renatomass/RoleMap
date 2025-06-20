@@ -10,22 +10,29 @@ import { api } from "../services/api";
 export default function EntrarSala() {
   const [codigo, setCodigo] = useState("");
   const navigate = useNavigate();
-  const { setCodigoSala, setNomeRole, nomeConvidado, localizacao, setSalaId } = useUser();
+  const {
+    setCodigoSala,
+    setNomeRole,
+    nomeConvidado,
+    localizacao,
+    setSalaId,
+    setConvidadoId,
+  } = useUser();
 
   const entrarNaSala = async () => {
     try {
       const response = await api.post("/sala/entrar", {
         codigo: codigo.trim(),
         nome: nomeConvidado || "Convidado",
-        localizacao: localizacao
+        localizacao: localizacao,
       });
 
-      const { salaId, nomeRole } = response.data;
+      const { salaId, nomeRole, convidadoId } = response.data;
 
-
-       if (response.status === 201 && salaId) {
+      if (response.status === 201 && salaId) {
         setSalaId(salaId);
         setNomeRole(nomeRole);
+        setConvidadoId(convidadoId);
         setCodigoSala(codigo.trim());
 
         socket.emit("entrar_na_sala", {
