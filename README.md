@@ -6,39 +6,57 @@ Aplicativo para encontrar o melhor rolê com amigos, baseado nas preferências d
 
 ## 🚀 Tecnologias Utilizadas
 
-- [React](https://reactjs.org/)
-- [Vite](https://vitejs.dev/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [React Router DOM](https://reactrouter.com/)
+* [React](https://reactjs.org/)
+* [Vite](https://vitejs.dev/)
+* [Tailwind CSS](https://tailwindcss.com/)
+* [React Router DOM](https://reactrouter.com/)
+* [Express](https://expressjs.com/)
+* [Socket.io](https://socket.io/)
+* [Sequelize](https://sequelize.org/)
+* [MySQL](https://www.mysql.com/)
+* [JWT](https://jwt.io/) + [Bcrypt](https://github.com/kelektiv/node.bcrypt.js)
 
 ---
 
 ## 📁 Estrutura de Pastas
 
 ```
-src/
-├── assets/              # Imagens e ícones
-├── components/          # Componentes reutilizáveis (botões, inputs, cards)
-├── pages/               # Páginas da aplicação
-├── routes/              # Sistema de rotas centralizado
-├── App.jsx              # Entrada principal do app
-└── main.jsx             # Bootstrap do React + Tailwind
+AppRoleMap/
+├── backend/                # Servidor Node.js com Express + Sequelize
+│   ├── controllers/        # Lógicas das rotas
+│   ├── routes/             # Endpoints da API
+│   ├── sockets/            # WebSockets com socket.io
+│   └── server.js           # Inicialização do backend
+│
+├── frontend/               # Aplicação React com Vite
+│   ├── assets/             # Imagens e ícones
+│   ├── components/         # Componentes reutilizáveis
+│   ├── context/            # Contexto global (useUser)
+│   ├── pages/              # Telas principais
+│   ├── routes/             # Sistema de rotas
+│   ├── App.jsx             # Componente principal
+│   └── main.jsx            # Entrada React DOM
 ```
 
 ---
 
 ## 🌐 Rotas Principais
 
-| Rota              | Página                       | Função                                 |
-|-------------------|------------------------------|----------------------------------------|
-| \`/\`             | Splash                       | Tela de boas-vindas                    |
-| \`/home\`         | Home                         | Escolha de modo (host/convidado...)   |
-| \`/criar\`        | CriarSala                    | Criar nova sala (host)                 |
-| \`/sala/:codigo\` | EntrarSala                   | Convidado insere o código da sala      |
-| \`/preferencias\` | Preferencias                 | Seleciona gostos do usuário            |
-| \`/esperando\`    | Esperando                    | Aguarda todos entrarem                 |
-| \`/resultado\`    | Resultado                    | Sugestão do rolê + votação             |
-| \`/final\`        | Final                        | Confirmação do local escolhido         |
+| Rota              | Página       | Função                                       |
+| ----------------- | ------------ | -------------------------------------------- |
+| `/`               | Splash       | Tela de boas-vindas                          |
+| `/apresentacao`   | Apresentacao | Explica como funciona                        |
+| `/home`           | Home         | Tela de login e escolha de modo              |
+| `/Cadastro`       | Cadastro     | Tela de criação de conta                     |
+| `/UserSala`       | UserSala     | Tela inicial do usuário logado               |
+| `/TipoRole`       | TipoRole     | Escolha de preferências do rolê              |
+| `/sala/convidado` | EntrarSala   | Tela para convidado inserir código           |
+| `/CodeRoom`       | CodeRoom     | Exibe o código da sala gerada pelo host      |
+| `/preferencias`   | Preferencias | Ajustes adicionais de preferências           |
+| `/espera`         | SalaEspera   | Tela de espera com contagem de participantes |
+| `/esperando`      | Esperando    | (Alternativa) Esperando participantes        |
+| `/resultado`      | Resultado    | Sugestão do rolê + sistema de votação        |
+| `/final`          | Final        | Confirmação do local escolhido               |
 
 ---
 
@@ -46,74 +64,80 @@ src/
 
 ```
 # Clonar o repositório
-git clone https://github.com/Renatomass/RoleMap.git
+https://github.com/Renatomass/RoleMap.git
 cd RoleMap
 
-# Instalar dependências
+# Instalar e rodar o backend
+cd backend
 npm install
+node server.js
 
-# Iniciar o servidor local
+# Em outro terminal, rodar o frontend
+cd ../frontend
+npm install
 npm run dev
 ```
+
 ---
 
 ## 🧠 Como contribuir (colaboradores da equipe)
 
 1. **Clone o repositório**
-    ```
+
+   ```bash
    git clone https://github.com/Renatomass/RoleMap.git
    ```
-
 2. **Crie uma nova branch com seu nome ou funcionalidade**
-   ```
+
+   ```bash
    git checkout -b feat/nome-da-funcionalidade
    ```
-
 3. **Edite apenas os arquivos da sua parte**
-   - Por exemplo: se você é responsável pela página `Preferencias`, edite só `src/pages/Preferencias.jsx` e seus componentes relacionados.
-
 4. **Adicione, commite e envie seu código**
-   ```
+
+   ```bash
    git add .
-   git commit -m "feat: tela de Preferencias"
+   git commit -m "feat: minha funcionalidade"
    git push origin feat/nome-da-funcionalidade
    ```
-
-5. **Abra um Pull Request no GitHub para a branch \`main\` ou \`develop\`**
+5. **Abra um Pull Request para `develop`**
 
 ---
 
 ## 🧾 Convenção de Branches
 
-- `main`: versão estável em produção
-- `develop`: versão de desenvolvimento integrada
-- `feat/`: novas funcionalidades (\`feat/splash-screen\`)
-- `fix/`: correções de bugs (\`fix/votacao-botao\`)
-- `refactor/`: melhorias de código sem mudança de comportamento
+* `main`: versão estável em produção
+* `develop`: versão de desenvolvimento integrada
+* `backend`: alterações específicas do servidor
+* `frontend`: alterações específicas do client
+* `feat/`: novas funcionalidades (ex: `feat/votacao`)
+* `fix/`: correções de bugs
+* `refactor/`: refatorações
 
 ---
 
 ## ✨ Status atual do projeto
 
-- [x] Setup com Vite + React
-- [x] TailwindCSS instalado e funcionando
-- [x] React Router configurado com todas as rotas
-- [x] Splash.jsx estilizada com Tailwind
-- [ ] Demais páginas em progresso...
+* [x] Setup com Vite + React
+* [x] TailwindCSS instalado e funcionando
+* [x] React Router configurado com todas as rotas
+* [x] Splash.jsx estilizada com Tailwind
+* [x] Login e Cadastro funcionando com Context API
+* [x] Estrutura separada de frontend/backend com Socket.io
+* [ ] Integração com banco de dados em andamento
+* [ ] Sugestão de rolê e sistema de votação
 
 ---
 
 ## 📌 Observações
 
-- Sempre mantenha seu branch atualizado com `main`:
+* Mantenha sua branch sincronizada com `develop`:
+
+  ```bash
+  git pull origin develop --rebase
   ```
-  git pull origin main --rebase
-  ```
-- Evite conflitos editando arquivos que não são sua responsabilidade
-- Para deploy futuro, usaremos Vercel ou Netlify
+* Faça commits pequenos e objetivos
+* Evite conflitos modificando apenas o que for sua responsabilidade
+* Backend usa ESModules (`type: "module"`)
 
 ---
-
-## 💬 Dúvidas ou sugestões?
-
-Fale com [@Renatomass](https://github.com/Renatomass)
