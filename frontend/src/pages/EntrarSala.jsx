@@ -4,7 +4,7 @@ import pessoasImage from '../assets/amigos.svg';
 import LogoMarca from '../components/LogoMarca';
 import PageWrapper from '../components/PageWrapper';
 import { useUser } from '../context/UseContext';
-import socket from "../services/sockets"; 
+import socket from "../services/socket"; 
 
 export default function EntrarSala() {
   const [codigo, setCodigo] = useState('');

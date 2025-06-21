@@ -11,7 +11,7 @@ import PageWrapper from "../components/PageWrapper";
 import SliderFiltro from "../components/SliderFilter";
 import InputText from "../components/InputText";
 import BtnPrincipal from "../components/BtnPrincipal";
-import socket from "../services/sockets";
+import socket from "../services/socket";
 import { api } from "../services/api";
 
 export default function TipoRole() {
