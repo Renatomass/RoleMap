@@ -10,11 +10,11 @@ function calcularDistanciaEmKm(metros) {
 }
 
 async function buscarLugares(preferencias, pontoMedio) {
-  const { tipo_role, palavras_chaves, distancia_lugar, rate_lugar } = preferencias;
+  const { tipo_role, palavras_chave, distancia, avaliacao_minima } = preferencias;
 
-  const location = `${pontoMedio.lat},${pontoMedio.lng}`;
-  const keyword = encodeURIComponent(`${tipo_role} ${palavras_chaves}`);
-  const radius = parseInt(distancia_lugar) * 1000; // metros
+   const location = `${pontoMedio.latitude},${pontoMedio.longitude}`;
+  const keyword = encodeURIComponent(`${tipo_role} ${palavras_chave}`);
+  const radius = parseInt(distancia) * 1000;
 
   const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location}&radius=${radius}&keyword=${keyword}&key=${GOOGLE_API_KEY}`;
 
@@ -25,10 +25,10 @@ async function buscarLugares(preferencias, pontoMedio) {
     console.dir(resultados.map(r => r.name), { depth: null });
 
     const lugaresFiltrados = resultados
-    .filter((lugar) => lugar.rating && lugar.rating >= parseFloat(rate_lugar))
+    .filter((lugar) => lugar.rating && lugar.rating >= parseFloat(avaliacao_minima))
       .map((lugar) => ({
         nome: lugar.name,
-        nota: lugar.rating,
+        nota: lugar.nota,
         endereco: lugar.vicinity,
         imagem: lugar.photos?.[0] ? montarFotoURL(lugar.photos[0].photo_reference) : "/img/imagem_padrao.svg",
         distancia: calcularDistanciaEmKm(lugar.distance_meters || radius),
