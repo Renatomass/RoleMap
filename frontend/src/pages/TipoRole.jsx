@@ -85,9 +85,8 @@ export default function TipoRole() {
     }
     try {
       const nomeFinal = nomeRole || `Rolê do(a) ${nomeHost}`;
-      console.log("Localização enviada:", localizacao);
       const response = await api.post(
-        "/sala/criar-sala",
+        "/sala/criar-role",
         {
           nome_role: nomeFinal,
           tipo_role: mapaCategorias[categoriaSelecionada],

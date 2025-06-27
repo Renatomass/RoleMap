@@ -18,7 +18,6 @@ export default function ResultadoRole() {
   console.log("🧠 sugestaoFinal:", sugestaoFinal);
 
   const handleEnviarMensagem = (mensagem) => {
-    console.log("Mensagem enviada:", mensagem);
     setMostrarModalDiga(false);
   };
 

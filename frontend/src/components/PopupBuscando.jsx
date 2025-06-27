@@ -19,8 +19,6 @@ export default function PopupBuscando({ mostrar }) {
           salaId,
         });
 
-        console.log("📦 Resposta Gemini:", response.data);
-
         setSugestaoFinal(response.data);
         socket.emit("enviar_sugestao", {
           codigo: codigoSala,

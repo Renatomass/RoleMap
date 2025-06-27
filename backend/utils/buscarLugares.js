@@ -10,9 +10,10 @@ function calcularDistanciaEmKm(metros) {
 }
 
 async function buscarLugares(preferencias, pontoMedio) {
-  const { tipo_role, palavras_chave, distancia, avaliacao_minima } = preferencias;
+  const { tipo_role, palavras_chave, distancia, avaliacao_minima } =
+    preferencias;
 
-   const location = `${pontoMedio.latitude},${pontoMedio.longitude}`;
+  const location = `${pontoMedio.latitude},${pontoMedio.longitude}`;
   const keyword = encodeURIComponent(`${tipo_role} ${palavras_chave}`);
   const radius = parseInt(distancia) * 1000;
 
@@ -22,20 +23,29 @@ async function buscarLugares(preferencias, pontoMedio) {
     const res = await axios.get(url);
     const resultados = res.data.results;
     console.log("🔍 Google retornou", resultados.length, "lugares:");
-    console.dir(resultados.map(r => r.name), { depth: null });
+    console.dir(
+      resultados.map((r) => r.name),
+      { depth: null }
+    );
 
     const lugaresFiltrados = resultados
-    .filter((lugar) => lugar.rating && lugar.rating >= parseFloat(avaliacao_minima))
+      .filter(
+        (lugar) => lugar.rating && lugar.rating >= parseFloat(avaliacao_minima)
+      )
       .map((lugar) => ({
         nome: lugar.name,
-        nota: lugar.nota,
+        nota: lugar.rating,
         endereco: lugar.vicinity,
-        imagem: lugar.photos?.[0] ? montarFotoURL(lugar.photos[0].photo_reference) : "/img/imagem_padrao.svg",
+        imagem: lugar.photos?.[0]
+          ? montarFotoURL(lugar.photos[0].photo_reference)
+          : "/img/imagem_padrao.svg",
         distancia: calcularDistanciaEmKm(lugar.distance_meters || radius),
-        link: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(lugar.name)}`
+        link: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+          lugar.name
+        )}`,
       }));
 
-    return lugaresFiltrados;
+    return lugaresFiltrados[0] || null;
   } catch (err) {
     console.error("Erro ao buscar lugares no Google:", err.message);
     return [];
