@@ -5,7 +5,7 @@ export default function SliderFiltro({ label, icon, min = 0, max = 50, step = 1,
     if (label === "Classificação") {
       return "⭐".repeat(val);
     } else if (label === "Preço") {
-      return "$".repeat(val + 1); // 
+      return "$".repeat(val + 1); 
     } else if (label === "Distância") {
       return `${val} km`;
     }

@@ -4,7 +4,6 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Lugar extends Model {
     static associate(models) {
-      // Lugar pode estar em vários Resultados
       Lugar.hasMany(models.Resultado, {
         foreignKey: 'lugar_id',
         as: 'resultados'

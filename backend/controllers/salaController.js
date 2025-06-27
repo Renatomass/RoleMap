@@ -1,7 +1,8 @@
 const gerarCodigo = require("../utils/gerarCodigo");
 const { Sala, Preferencia, Convidado, Usuario } = require("../models");
-const montarPrompt = require("../utils/montarPrompt");
-const consultarGemini = require("../utils/consultarGemini");
+// const montarPrompt = require("../utils/montarPrompt"); retirar o gemini por hora
+// const consultarGemini = require("../utils/consultarGemini");
+const buscarLugares = require("../utils/buscarLugares");
 
 const criarSala = async (req, res) => {
   try {
@@ -169,8 +170,8 @@ const gerarSugestao = async (req, res) => {
     const pontoMedio = calcularCentroGeografico(todasLocalizacoes);
     const preferencias = sala.preferencia;
 
-    const promptFinal = montarPrompt({ pontoMedio, preferencias });
-    const sugestao = await consultarGemini(promptFinal, pontoMedio);
+    // const promptFinal = montarPrompt({ pontoMedio, preferencias });
+    const sugestao = await buscarLugares(preferencias, pontoMedio);
 
     return res.status(200).json({
       pontoMedio,

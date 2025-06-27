@@ -3,8 +3,8 @@ function montarPrompt({ pontoMedio, preferencias }) {
   const { tipo_role, palavras_chave, distancia, preco, avaliacao_minima } = preferencias;
 
   const promptFinal = `
+  
 Você é um especialista em recomendação de locais.
-
 A missão: sugerir um local ideal para um rolê.
 
 Dados do grupo:
@@ -22,7 +22,7 @@ Dados do grupo:
 - **Distancia:** [Distancia do ponto medio para o local sugerido]
 - **Nota:** [número de 0 a 5 com base no Google]
 - **Link:** [endereço completo do local no Google Maps]
-- **Imagem:** [URL direta e pública de uma imagem JPG ou PNG do local, tambem pode icone do site oficial do estabeleciment. Evite links do Google Maps ou Googleusercontent se não forem acessíveis diretamente.]
+- **Imagem:** [URL direta e pública de uma imagem JPG ou PNG do local, tambem pode icone do site oficial do estabelecimento. Evite links do Google Maps ou Googleusercontent se não forem acessíveis diretamente ou gere uma imagem.]
 
 Atenção:
 - Não invente lugares fictícios.

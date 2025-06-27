@@ -58,7 +58,7 @@ async function consultarGemini(prompt, pontoMedio) {
 
   console.log("🟢 Resposta crua do Gemini:", texto);
 
-  const resultado = parseGeminiResposta(texto);
+    const resultado = parseGeminiResposta(texto);
 
     const coords = extrairCoordenadas(resultado.link);
   if (coords) {
