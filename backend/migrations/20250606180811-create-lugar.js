@@ -21,6 +21,9 @@ module.exports = {
       nota: {
         type: Sequelize.DECIMAL
       },
+      imagem: {
+        type: Sequelize.STRING
+      },
       localizacao: {
         type: Sequelize.STRING
       },
