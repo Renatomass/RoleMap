@@ -5,6 +5,8 @@ import ModalNaoVotou from "./ModalNaoVotou";
 import Timer from "./Timer";
 import { useUser } from "../context/UseContext";
 import { api } from "../services/api";
+import { error } from "../utils/logger";
+
 
 export default function CardLocal({
   nome = "Local secreto",
@@ -31,7 +33,7 @@ export default function CardLocal({
         voto: resposta,
       });
     } catch (err) {
-      console.error("Erro ao enviar voto", err);
+      error("Erro ao enviar voto", err);
     }
   };
 

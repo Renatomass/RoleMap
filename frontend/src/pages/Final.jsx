@@ -3,6 +3,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { useUser } from "../context/UseContext";
 import { api } from "../services/api";
+import { error } from "../utils/logger";
+
 
 export default function ResultadoFinal() {
   const navigate = useNavigate();
@@ -30,7 +32,7 @@ export default function ResultadoFinal() {
         const resposta = await api.get(`/sala/${salaId}/votos`);
         setVotos(resposta.data);
       } catch (err) {
-        console.error("Erro ao buscar votos:", err);
+        error("Erro ao buscar votos:", err);
       }
     };
     obterVotos();

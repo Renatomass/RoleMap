@@ -5,6 +5,8 @@ import LogoMarca from '../components/LogoMarca';
 import WhiteContainer from '../components/WhiteContainer';
 import { useUser } from '../context/UseContext';
 import { api } from '../services/api';
+import { log, error } from '../utils/logger';
+
 
 export default function Cadastro() {
   const navigate = useNavigate();
@@ -30,10 +32,10 @@ export default function Cadastro() {
       });
       navigate("/UserSala");
     } catch (error) {
-  console.error("Erro bruto no cadastro:", error);
+  error("Erro bruto no cadastro:", error);
 
   if (error.response) {
-    console.log("Erro da API:", error.response.data);
+    log("Erro da API:", error.response.data);
     alert(error.response.data.erro || "Erro ao cadastrar (API).");
   } else {
     alert("Erro ao cadastrar (sem resposta do servidor).");

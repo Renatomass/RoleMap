@@ -7,6 +7,8 @@ import Feedback from "../components/Feedback";
 import ModalDigaAlgo from "../components/ModalDigaAlgo";
 import placeholderImg from "../assets/restaurante.jpg";
 import { api } from "../services/api";
+import { log, error } from "../utils/logger";
+
 
 
 
@@ -15,7 +17,7 @@ export default function ResultadoRole() {
 
   const { sugestaoFinal, votos, setVotos, codigoSala, salaId } = useUser();
   const sugestao = sugestaoFinal?.sugestao;
-  console.log("🧠 sugestaoFinal:", sugestaoFinal);
+  log("🧠 sugestaoFinal:", sugestaoFinal);
 
   const handleEnviarMensagem = (mensagem) => {
     setMostrarModalDiga(false);
@@ -41,7 +43,7 @@ export default function ResultadoRole() {
         const resposta = await api.get(`/sala/${salaId}/votos`);
         setVotos(resposta.data);
       } catch (err) {
-        console.error("Erro ao buscar votos:", err);
+        error("Erro ao buscar votos:", err);
       }
     };
     obterVotos();

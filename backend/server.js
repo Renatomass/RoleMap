@@ -1,19 +1,23 @@
-const express = require('express');
-const cors = require('cors');
-const http = require('http');
-const { Server } = require('socket.io');
-const salaRoutes = require('./routes/salaRoutes');
-const usuarioRoutes = require('./routes/usuarioRoutes');
-require('dotenv').config();
-const db = require('./models');
-
+const express = require("express");
+const cors = require("cors");
+const http = require("http");
+const { Server } = require("socket.io");
+const salaRoutes = require("./routes/salaRoutes");
+const usuarioRoutes = require("./routes/usuarioRoutes");
+require("dotenv").config();
+const db = require("./models");
+const logger = require("./utils/logger");
 
 const app = express();
 const server = http.createServer(app);
 
-db.sequelize.authenticate()
-  .then(() => console.log('✅ Banco de dados conectado'))
-  .catch((err) => console.error('Erro ao conectar ao banco:', err));
+const SERVER_URL = process.env.SERVER_URL || "http://localhost";
+const PORT = process.env.SERVER_PORT || process.env.PORT || 3001;
+
+db.sequelize
+  .authenticate()
+  .then(() => logger.log("✅ Banco de dados conectado"))
+  .catch((err) => logger.error("Erro ao conectar ao banco:", err));
 
 const io = new Server(server, {
   cors: { origin: "*" },
@@ -23,8 +27,7 @@ app.set("io", io);
 const salas = {};
 
 io.on("connection", (socket) => {
-  console.log("🔌 Novo usuário conectado:", socket.id);
-
+  logger.log("🔌 Novo usuário conectado:", socket.id);
   socket.on("entrar_na_sala", ({ codigo, apelido }) => {
     socket.join(codigo);
 
@@ -40,7 +43,7 @@ io.on("connection", (socket) => {
     io.to(socket.id).emit("atualizar_participantes", salas[codigo] || []);
   });
 
-   socket.on("iniciar_busca", ({ codigo }) => {
+  socket.on("iniciar_busca", ({ codigo }) => {
     io.to(codigo).emit("mostrar_popup_busca");
   });
 
@@ -49,7 +52,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    console.log("❌ Usuário desconectado:", socket.id);
+    logger.log("❌ Usuário desconectado:", socket.id);
 
     for (const codigo in salas) {
       const antes = salas[codigo].length;
@@ -72,11 +75,10 @@ app.use(express.json());
 app.use("/sala", salaRoutes);
 app.use("/usuarios", usuarioRoutes);
 
-app.get('/', (_req, res) => {
-  res.send('Servidor está vivo! 🚀');
+app.get("/", (_req, res) => {
+  res.send("Servidor está vivo! 🚀");
 });
 
-const PORT = 3001;
 server.listen(PORT, () => {
-  console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
+  logger.log(`🚀 Servidor rodando em ${SERVER_URL}:${PORT}`);
 });

@@ -4,6 +4,7 @@ import PageWrapper from "../components/PageWrapper";
 import socket from "../services/sockets";
 import PopupBuscando from "../components/PopupBuscando";
 import { useNavigate } from "react-router-dom";
+import { log } from "../utils/logger";
 
 
 export default function SalaEspera() {
@@ -24,7 +25,7 @@ export default function SalaEspera() {
 
   useEffect(() => {
   socket.on("mostrar_popup_busca", () => {
-    console.log("🔄 Recebido: mostrar_popup_busca");
+    log("🔄 Recebido: mostrar_popup_busca");
     setBuscando(true);
   });
 
@@ -50,7 +51,7 @@ export default function SalaEspera() {
       socket.emit("listar_participantes", codigoSala);
 
       socket.on("atualizar_participantes", (lista) => {
-        console.log("Participantes recebidos:", lista);
+        log("Participantes recebidos:", lista);
         setParticipantes(lista);
       });
 

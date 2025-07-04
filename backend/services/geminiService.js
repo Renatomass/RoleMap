@@ -1,5 +1,6 @@
 const axios = require('axios');
-require('dotenv').config(); 
+require('dotenv').config();
+const logger = require('../utils/logger');
 
 exports.getRespostaGemini = async (prompt) => {
   try {
@@ -18,7 +19,7 @@ exports.getRespostaGemini = async (prompt) => {
     const texto = response.data.candidates[0].content.parts[0].text;
     return JSON.parse(texto); 
   } catch (error) {
-    console.error("❌ Erro ao chamar Gemini:", error.message);
+    logger.error("❌ Erro ao chamar Gemini:", error.message);
     throw error;
   }
 };

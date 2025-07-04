@@ -1,6 +1,8 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { Usuario } = require("../models");
+const logger = require("../utils/logger");
+
 const usuarioController = {
   async cadastrar(req, res) {
     try {
@@ -38,9 +40,9 @@ const usuarioController = {
         token: token,
       });
     } catch (error) {
-      console.error("Erro no cadastro:", error);
-      console.log("🔥 error.response:", error.response);
-      console.log("🔥 error.response?.data:", error.response?.data);
+       logger.error("Erro no cadastro:", error);
+      logger.log("🔥 error.response:", error.response);
+      logger.log("🔥 error.response?.data:", error.response?.data);
     }
   },
 //nao mexer daqui pra cima

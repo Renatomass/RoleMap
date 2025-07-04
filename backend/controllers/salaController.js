@@ -4,6 +4,8 @@ const { Sala, Preferencia, Convidado, Usuario } = require("../models");
 // const consultarGemini = require("../utils/consultarGemini");
 // const buscarLugares = require("../utils/buscarLugares");
 const obterLugares = require("../utils/obterLugares");
+const logger = require("../utils/logger");
+
 
 const criarSala = async (req, res) => {
   try {
@@ -45,7 +47,7 @@ const criarSala = async (req, res) => {
       .status(201)
       .json({ codigo, salaId: sala.id, convidadoId: convidadoHost.id });
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     res
       .status(500)
       .json({ erro: "Erro ao criar sala", detalhe: error.message });
@@ -110,7 +112,7 @@ const criarRole = async (req, res) => {
       convidadoId: convidadoHost.id,
     });
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return res
       .status(500)
       .json({ erro: "Erro ao criar rolê", detalhe: error.message });
@@ -181,7 +183,7 @@ const gerarSugestao = async (req, res) => {
       sugestao,
     });
   } catch (error) {
-    console.error("❌ Erro interno ao gerar sugestão:", error);
+    logger.error("❌ Erro interno ao gerar sugestão:", error);
     return res
       .status(500)
       .json({ erro: "Erro ao gerar sugestões", detalhe: error.message });
@@ -220,7 +222,7 @@ const entrarComoConvidado = async (req, res) => {
       nomeSala: sala.nome,
     });
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     res
       .status(500)
       .json({ erro: "Erro ao tentar entrar na sala", detalhe: error.message });
@@ -261,7 +263,7 @@ const votar = async (req, res) => {
 
     res.status(200).json({ mensagem: "Voto registrado" });
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     res
       .status(500)
       .json({ erro: "Erro ao registrar voto", detalhe: error.message });
@@ -283,7 +285,7 @@ const listarVotos = async (req, res) => {
 
     return res.status(200).json(votos);
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     res
       .status(500)
       .json({ erro: "Erro ao listar votos", detalhe: error.message });

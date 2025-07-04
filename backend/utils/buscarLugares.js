@@ -1,5 +1,7 @@
 const axios = require("axios");
 const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
+const logger = require("./logger");
+
 
 function montarFotoURL(photoRef) {
   return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=600&photo_reference=${photoRef}&key=${GOOGLE_API_KEY}`;
@@ -22,8 +24,8 @@ async function buscarLugares(preferencias, pontoMedio) {
   try {
     const res = await axios.get(url);
     const resultados = res.data.results;
-    console.log("🔍 Google retornou", resultados.length, "lugares:");
-    console.dir(
+    logger.log("🔍 Google retornou", resultados.length, "lugares:");
+    logger.log(
       resultados.map((r) => r.name),
       { depth: null }
     );
@@ -47,7 +49,7 @@ async function buscarLugares(preferencias, pontoMedio) {
 
     return lugaresFiltrados[0] || null;
   } catch (err) {
-    console.error("Erro ao buscar lugares no Google:", err.message);
+    logger.error("Erro ao buscar lugares no Google:", err.message);
     return [];
   }
 }

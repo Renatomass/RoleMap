@@ -6,6 +6,8 @@ import PageWrapper from "../components/PageWrapper";
 import { useUser } from "../context/UseContext";
 import socket from "../services/sockets";
 import { api } from "../services/api";
+import { error } from "../utils/logger";
+
 
 export default function EntrarSala() {
   const [codigo, setCodigo] = useState("");
@@ -45,7 +47,7 @@ export default function EntrarSala() {
         alert("Código inválido ou sala inexistente");
       }
     } catch (error) {
-      console.error("Erro ao entrar na sala:", error);
+      error("Erro ao entrar na sala:", error);
       alert("Erro ao tentar entrar na sala.");
     }
   };

@@ -4,6 +4,8 @@ import { useUser } from "../context/UseContext";
 import { useNavigate } from "react-router-dom";
 import { api } from "../services/api";
 import socket from "../services/sockets";
+import { error } from "../utils/logger";
+
 
 export default function PopupBuscando({ mostrar }) {
   const { salaId, codigoSala, setSugestaoFinal } = useUser();
@@ -26,7 +28,7 @@ export default function PopupBuscando({ mostrar }) {
         });
         navigate("/resultado");
       } catch (error) {
-        console.error("❌ Erro ao buscar sugestão:", error);
+        error("❌ Erro ao buscar sugestão:", error);
       }
     };
 

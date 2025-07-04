@@ -14,6 +14,8 @@ import InputText from "../components/InputText";
 import BtnPrincipal from "../components/BtnPrincipal";
 import socket from "../services/sockets";
 import LocalHostGps from "../components/LocalHostGps";
+import { log } from "../utils/logger";
+
 
 export default function TipoRole() {
   const [categoriaSelecionada, setCategoriaSelecionada] = useState(null);
@@ -122,7 +124,7 @@ export default function TipoRole() {
 
       navigate("/CodeRoom");
     } catch (error) {
-      console.log("Erro ao criar sala:", error);
+      log("Erro ao criar sala:", error);
     }
   };
 

@@ -25,8 +25,7 @@ AppRoleMap/
 ├── backend/                # Servidor Node.js com Express + Sequelize
 │   ├── controllers/        # Lógicas das rotas
 │   ├── routes/             # Endpoints da API
-│   ├── sockets/            # WebSockets com socket.io
-│   └── server.js           # Inicialização do backend
+│   └── server.js           # API e WebSockets com socket.io
 │
 ├── frontend/               # Aplicação React com Vite
 │   ├── assets/             # Imagens e ícones
@@ -80,6 +79,23 @@ npm run dev
 
 ---
 
+## 🔧 Variáveis de Ambiente
+
+1. crie o arquivo `.env` na raiz do projeto:
+
+2. Preencha os valores das variáveis exigidas:
+
+   ```
+   GOOGLE_API_KEY=seu_token_google
+   GEMINI_API_KEY=seu_token_gemini
+   JWT_SECRET=segredo_da_jwt
+   DB_USERNAME=usuario
+   DB_PASSWORD=senha
+   DB_NAME=banco
+   DB_DIALECT=mysql
+   DB_HOST=localhost
+   ```
+
 ## 🧠 Como contribuir (colaboradores da equipe)
 
 1. **Clone o repositório**
@@ -124,8 +140,8 @@ npm run dev
 * [x] Splash.jsx estilizada com Tailwind
 * [x] Login e Cadastro funcionando com Context API
 * [x] Estrutura separada de frontend/backend com Socket.io
-* [ ] Integração com banco de dados em andamento
-* [ ] Sugestão de rolê e sistema de votação
+* [x] Integração com banco de dados em andamento
+* [x] Sugestão de rolê e sistema de votação
 
 ---
 

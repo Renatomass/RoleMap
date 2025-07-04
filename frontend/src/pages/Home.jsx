@@ -12,6 +12,8 @@ import BtnEntrarCodigo from "../components/BtnEntrarCodigo";
 import InputLogin from "../components/InputLogin";
 import ApelidoPopup from "../components/ApelidoPopup";
 import { api } from "../services/api"; 
+import { error } from "../utils/logger";
+
 
 export default function Home() {
   const { user,setUser } = useUser();
@@ -47,7 +49,7 @@ export default function Home() {
       navigate("/UserSala");
 
     } catch (error) {
-    console.error("Erro no login:", error.response?.data || error.message);
+    error("Erro no login:", error.response?.data || error.message);
     alert(error.response?.data?.erro || "Erro ao fazer login. Tente novamente.");
 
     }
