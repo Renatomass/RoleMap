@@ -3,12 +3,15 @@ import PageWrapper from "../components/PageWrapper";
 import BtnPrincipal from "../components/BtnPrincipal";
 import PopupBuscando from "../components/PopupBuscando";
 import { useState } from "react";
+import Toast from "../components/Toast";
 import socket from "../services/sockets";
 
 export default function CodeRoom() {
   const { codigoSala, salaId } = useUser();
 
   const [buscando, setBuscando] = useState(false);
+  const [toastMsg, setToastMsg] = useState("");
+
   const iniciarBusca = () => {
     setBuscando(true);
     socket.emit("iniciar_busca", { codigo: codigoSala, salaId });
@@ -16,7 +19,7 @@ export default function CodeRoom() {
 
   const copiarCodigo = () => {
     navigator.clipboard.writeText(codigoSala);
-    alert("Código copiado!");
+    setToastMsg("Código copiado!");
   };
 
   return (
@@ -39,6 +42,9 @@ export default function CodeRoom() {
         </div>
       </div>
       {buscando && <PopupBuscando mostrar={buscando} />}
+       {toastMsg && (
+        <Toast message={toastMsg} onClose={() => setToastMsg("")} />
+      )}
     </PageWrapper>
   );
 }

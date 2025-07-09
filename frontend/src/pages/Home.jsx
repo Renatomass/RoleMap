@@ -11,22 +11,23 @@ import BtnCadastreSe from "../components/BtnCadastre-se";
 import BtnEntrarCodigo from "../components/BtnEntrarCodigo";
 import InputLogin from "../components/InputLogin";
 import ApelidoPopup from "../components/ApelidoPopup";
-import { api } from "../services/api"; 
+import { api } from "../services/api";
 import { error } from "../utils/logger";
-
+import Toast from "../components/Toast";
 
 export default function Home() {
-  const { user,setUser } = useUser();
+  const { user, setUser } = useUser();
   const [form, setForm] = useState({ nome: "", email: "", senha: "" });
   const [apelido, setApelido] = useState("");
   const [erroApelido, setErroApelido] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [popupAnimar, setPopupAnimar] = useState(false);
-  
+  const [toastMsg, setToastMsg] = useState("");
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-        const { name, value } = e.target;
+    const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -45,15 +46,13 @@ export default function Home() {
         token: token,
       });
 
-       
       navigate("/UserSala");
-
     } catch (error) {
-    error("Erro no login:", error.response?.data || error.message);
-    alert(error.response?.data?.erro || "Erro ao fazer login. Tente novamente.");
-
+      error("Erro no login:", error.response?.data || error.message);
+      setToastMsg(
+        error.response?.data?.erro || "Erro ao fazer login. Tente novamente."
+      );
     }
-   
   };
 
   const handleApelidoConfirmar = () => {
@@ -66,9 +65,10 @@ export default function Home() {
     }
   };
 
-  useEffect(() =>{
-    if (user?.email && user?.senha)
-    { navigate ("/UserSala");}
+  useEffect(() => {
+    if (user?.email && user?.senha) {
+      navigate("/UserSala");
+    }
   }, [user, navigate]);
 
   return (
@@ -78,24 +78,23 @@ export default function Home() {
         <form onSubmit={handleSubmit}>
           <InputLogin
             label="Email"
-            name= "email"
+            name="email"
             type="email"
             value={form.email}
             required
             onChange={handleChange}
             placeholder="Digite seu email"
-            
           />
           <InputLogin
             label="Senha"
-            name= "senha"
+            name="senha"
             type="password"
             value={form.senha}
             required
             onChange={handleChange}
             placeholder="Digite sua senha"
           />
-          <BtnEntrar type="submit"/>
+          <BtnEntrar type="submit" />
         </form>
         <p className="text-black font-medium text-xs text-center mt-1">OU</p>
         <Link to="/Cadastro">
@@ -125,6 +124,7 @@ export default function Home() {
           erro={erroApelido}
         />
       )}
+      {toastMsg && <Toast message={toastMsg} onClose={() => setToastMsg("")} />}
     </PageWrapper>
   );
 }

@@ -1,24 +1,27 @@
 import PageWrapper from "../components/PageWrapper";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useUser } from "../context/UseContext";
 import { api } from "../services/api";
 import { error } from "../utils/logger";
-
+import Toast from "../components/Toast";
 
 export default function ResultadoFinal() {
   const navigate = useNavigate();
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const votacaoFinalizada = params.get("resultado") === "true";
+  const [toastMsg, setToastMsg] = useState("");
 
-  const { votos,
+  const {
+    votos,
     sugestaoFinal,
     salaId,
     setVotos,
     convidadoId,
     codigoSala,
-    setSugestaoFinal, } = useUser();
+    setSugestaoFinal,
+  } = useUser();
 
   const lugar = sugestaoFinal?.sugestao;
 
@@ -45,24 +48,26 @@ export default function ResultadoFinal() {
     obterVotos();
   }, [salaId, setVotos]);
 
-    const tentarNovamente = async () => {
+  const tentarNovamente = async () => {
     try {
       const resposta = await api.post("/sala/sugestao", { salaId });
       setSugestaoFinal(resposta.data);
-      socket.emit("enviar_sugestao", { codigo: codigoSala, sugestao: resposta.data });
+      socket.emit("enviar_sugestao", {
+        codigo: codigoSala,
+        sugestao: resposta.data,
+      });
       navigate("/resultado");
     } catch (err) {
       error("Erro ao tentar nova sugestao:", err);
     }
   };
 
-
   return (
     <PageWrapper>
       <div className="text-center text-white sm:mt-6 mt-14 mb-4 px-4">
         <h1 className="text-3xl font-bold">🎉 Resultado da Votação</h1>
         <p className="text-base text-gray-300 mt-1">
-            {maioriaSim
+          {maioriaSim
             ? "A maioria decidiu por esse rolê!"
             : "A maioria decidiu não ir nesse rolê."}
         </p>
@@ -112,7 +117,10 @@ export default function ResultadoFinal() {
           <button
             onClick={() => {
               const nome = encodeURIComponent(lugar?.nome || "");
-              window.open(`https://www.google.com/maps/search/${nome}`, "_blank");
+              window.open(
+                `https://www.google.com/maps/search/${nome}`,
+                "_blank"
+              );
             }}
             className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl cursor-pointer font-bold shadow-md transition-transform transform hover:scale-105"
           >
@@ -121,7 +129,7 @@ export default function ResultadoFinal() {
 
           <button
             onClick={() =>
-              alert("Evento salvo! Em breve enviaremos por e-mail")
+              setToastMsg("Evento salvo! Em breve enviaremos por e-mail")
             }
             className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 cursor-pointer rounded-xl font-bold shadow-md transition-transform transform hover:scale-105"
           >
@@ -136,6 +144,9 @@ export default function ResultadoFinal() {
           Tentar novamente
         </button>
       </div>
+      {toastMsg && (
+        <Toast message={toastMsg} onClose={() => setToastMsg("")} />
+      )}
     </PageWrapper>
   );
 }

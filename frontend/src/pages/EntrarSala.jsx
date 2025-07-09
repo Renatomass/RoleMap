@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Toast from "../components/Toast";
 import { useNavigate } from "react-router-dom";
 import pessoasImage from "../assets/amigos.svg";
 import LogoMarca from "../components/LogoMarca";
@@ -8,9 +9,9 @@ import socket from "../services/sockets";
 import { api } from "../services/api";
 import { error } from "../utils/logger";
 
-
 export default function EntrarSala() {
   const [codigo, setCodigo] = useState("");
+  const [toastMsg, setToastMsg] = useState("");
   const navigate = useNavigate();
   const {
     setCodigoSala,
@@ -48,7 +49,7 @@ export default function EntrarSala() {
       }
     } catch (error) {
       error("Erro ao entrar na sala:", error);
-      alert("Erro ao tentar entrar na sala.");
+      setToastMsg("Código inválido ou sala inexistente");
     }
   };
 
@@ -75,6 +76,9 @@ export default function EntrarSala() {
         alt="Três pessoas"
         className="absolute w-90 -bottom-0"
       />
+      {toastMsg && (
+        <Toast message={toastMsg} onClose={() => setToastMsg("")} />
+      )}
     </PageWrapper>
   );
 }

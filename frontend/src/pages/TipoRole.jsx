@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Toast from "../components/Toast";
 import { useUser } from "../context/UseContext";
 import { useNavigate } from "react-router-dom";
 import { api } from "../services/api";
@@ -16,13 +17,14 @@ import socket from "../services/sockets";
 import LocalHostGps from "../components/LocalHostGps";
 import { log } from "../utils/logger";
 
-
 export default function TipoRole() {
   const [categoriaSelecionada, setCategoriaSelecionada] = useState(null);
   const [distancia, setDistancia] = useState(30);
   const [preco, setPreco] = useState(2);
   const [nota, setNota] = useState(4);
   const [keywords, setKeywords] = useState("");
+  const [toastMsg, setToastMsg] = useState("");
+
   const {
     setCodigoSala,
     setNomeRole,
@@ -82,7 +84,7 @@ export default function TipoRole() {
 
   const handleCriarRole = async () => {
     if (!user || !user.token) {
-      alert("Você precisa esta logado para criar role.");
+      setToastMsg("Você precisa esta logado para criar role.");
       return;
     }
     try {
@@ -111,7 +113,7 @@ export default function TipoRole() {
       setSalaId(salaId);
       setNomeRole(nomeFinal);
       if (convidadoId) {
-      setConvidadoId(convidadoId);
+        setConvidadoId(convidadoId);
       }
       localStorage.setItem("nomeRole", nomeFinal);
 
@@ -217,6 +219,9 @@ export default function TipoRole() {
           </BtnPrincipal>
         </div>
       </div>
+      {toastMsg && (
+        <Toast message={toastMsg} onClose={() => setToastMsg("")} />
+      )}
     </PageWrapper>
   );
 }
