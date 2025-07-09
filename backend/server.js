@@ -51,6 +51,10 @@ io.on("connection", (socket) => {
     io.to(codigo).emit("nova_sugestao", sugestao);
   });
 
+  socket.on("enviar_mensagem", ({ codigo, nome, mensagem }) => {
+    io.to(codigo).emit("nova_mensagem", { nome, mensagem });
+  });
+  
   socket.on("disconnect", () => {
     logger.log("❌ Usuário desconectado:", socket.id);
 

@@ -12,6 +12,8 @@ export function UserProvider({ children }) {
   const [localizacao, setLocalizacao] = useState("");
   const [sugestaoFinal, setSugestaoFinal] = useState(null);
   const [votos, setVotos] = useState([]);
+  const [mensagens, setMensagens] = useState([]);
+
 
 
   const logout = () => {
@@ -40,6 +42,8 @@ export function UserProvider({ children }) {
         setSalaId,
         votos,
         setVotos,
+        mensagens,
+        setMensagens,
       }}
     >
       {children}

@@ -8,7 +8,7 @@ import { log } from "../utils/logger";
 
 
 export default function SalaEspera() {
-  const { codigoSala, nomeRole, setNomeRole, setSugestaoFinal } = useUser();
+  const { codigoSala, nomeRole, setNomeRole, setSugestaoFinal, user } = useUser();
   const [participantes, setParticipantes] = useState([]);
   const [buscando, setBuscando] = useState(false);
   const navigate = useNavigate();
@@ -102,10 +102,11 @@ export default function SalaEspera() {
             </div>
           ))}
         </div>
-
-        <button className="mt-10 px-6 py-2 bg-teal-500 hover:bg-teal-600 text-white rounded-xl font-bold">
-          Começar votação
-        </button>
+        {user && (
+          <button className="mt-10 px-6 py-2 bg-teal-500 hover:bg-teal-600 text-white rounded-xl font-bold">
+            Começar votação
+          </button>
+        )}
       </div>
     </PageWrapper>
   );

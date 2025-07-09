@@ -12,7 +12,14 @@ export default function ResultadoFinal() {
   const params = new URLSearchParams(location.search);
   const votacaoFinalizada = params.get("resultado") === "true";
 
-  const { votos, sugestaoFinal, salaId, setVotos, convidadoId } = useUser();
+  const { votos,
+    sugestaoFinal,
+    salaId,
+    setVotos,
+    convidadoId,
+    codigoSala,
+    setSugestaoFinal, } = useUser();
+
   const lugar = sugestaoFinal?.sugestao;
 
   const votosSim = votos.filter((v) => v.voto === "sim").length;
@@ -37,6 +44,18 @@ export default function ResultadoFinal() {
     };
     obterVotos();
   }, [salaId, setVotos]);
+
+    const tentarNovamente = async () => {
+    try {
+      const resposta = await api.post("/sala/sugestao", { salaId });
+      setSugestaoFinal(resposta.data);
+      socket.emit("enviar_sugestao", { codigo: codigoSala, sugestao: resposta.data });
+      navigate("/resultado");
+    } catch (err) {
+      error("Erro ao tentar nova sugestao:", err);
+    }
+  };
+
 
   return (
     <PageWrapper>
@@ -111,10 +130,10 @@ export default function ResultadoFinal() {
         </div>
 
         <button
-          onClick={() => navigate("/TipoRole")}
+          onClick={tentarNovamente}
           className="mt-4 text-sm text-purple-300 font-bold hover:text-white cursor-pointer "
         >
-          Fazer nova busca
+          Tentar novamente
         </button>
       </div>
     </PageWrapper>

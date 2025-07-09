@@ -15,12 +15,26 @@ import { log, error } from "../utils/logger";
 export default function ResultadoRole() {
   const [mostrarModalDiga, setMostrarModalDiga] = useState(false);
 
-  const { sugestaoFinal, votos, setVotos, codigoSala, salaId } = useUser();
+  const {  sugestaoFinal,
+    votos,
+    setVotos,
+    codigoSala,
+    salaId,
+    mensagens,
+    setMensagens,
+    nomeConvidado,
+    user } = useUser();
+
   const sugestao = sugestaoFinal?.sugestao;
   log("🧠 sugestaoFinal:", sugestaoFinal);
 
   const handleEnviarMensagem = (mensagem) => {
-    setMostrarModalDiga(false);
+      if (!mensagem) return;
+    socket.emit("enviar_mensagem", {
+      codigo: codigoSala,
+      nome: nomeConvidado || user?.nome,
+      mensagem,
+    });
   };
 
     useEffect(() => {
@@ -31,10 +45,14 @@ export default function ResultadoRole() {
     if (codigoSala) {
       socket.emit("entrar_na_sala", { codigo: codigoSala });
     }
+    const receberMensagem = (info) => {
+      setMensagens((prev) => [...prev, info]);
+    };
+    socket.on("nova_mensagem", receberMensagem);
     return () => {
       socket.off("novo_voto", receberVoto);
     };
-  }, [codigoSala, setVotos]);
+  }, [codigoSala, setVotos, setMensagens]);
 
   useEffect(() => {
     const obterVotos = async () => {
@@ -49,12 +67,6 @@ export default function ResultadoRole() {
     obterVotos();
   }, [salaId, setVotos]);
 
-  const amigos = [
-    { nome: "João", msg: "Cuida!" },
-    { nome: "Maria", msg: "Paia demais!" },
-    { nome: "Paulo", msg: "Sei não hein..." },
-    { nome: "Julia", msg: "Partiu!" },
-  ];
 
   return (
     <PageWrapper>
@@ -97,8 +109,8 @@ export default function ResultadoRole() {
 
       <div className="w-full max-w-md ml-2 mt-6">
         <div className="flex flex-wrap justify-around gap-2">
-          {amigos.map((amigo, i) => (
-            <Feedback key={i} nome={amigo.nome} msg={amigo.msg} />
+          {mensagens.map((m, i) => (
+            <Feedback key={i} nome={m.nome} msg={m.mensagem} />
           ))}
         </div>
       </div>
