@@ -6,13 +6,24 @@ import PopupBuscando from "../components/PopupBuscando";
 import { useNavigate } from "react-router-dom";
 import { log } from "../utils/logger";
 
-
 export default function SalaEspera() {
-  const { codigoSala, nomeRole, setNomeRole, setSugestaoFinal, user } = useUser();
+  const {
+    codigoSala,
+    nomeRole,
+    setNomeRole,
+    setSugestaoFinal,
+    user,
+    mensagens,
+    setMensagens,
+  } = useUser();
   const [participantes, setParticipantes] = useState([]);
   const [buscando, setBuscando] = useState(false);
   const navigate = useNavigate();
 
+  const iniciarBusca = () => {
+    setBuscando(true);
+    socket.emit("iniciar_busca", { codigo: codigoSala });
+  };
 
   useEffect(() => {
     if (!nomeRole) {
@@ -24,16 +35,15 @@ export default function SalaEspera() {
   }, []);
 
   useEffect(() => {
-  socket.on("mostrar_popup_busca", () => {
-    log("🔄 Recebido: mostrar_popup_busca");
-    setBuscando(true);
-  });
+    socket.on("mostrar_popup_busca", () => {
+      log("🔄 Recebido: mostrar_popup_busca");
+      setBuscando(true);
+    });
 
-  return () => {
-    socket.off("mostrar_popup_busca");
-  };
-}, []);
-
+    return () => {
+      socket.off("mostrar_popup_busca");
+    };
+  }, []);
 
   useEffect(() => {
     socket.on("nova_sugestao", (dados) => {
@@ -45,6 +55,17 @@ export default function SalaEspera() {
     };
   }, [navigate, setSugestaoFinal]);
 
+  useEffect(() => {
+    if (!codigoSala) return;
+    const receberMensagem = (info) => {
+      setMensagens((prev) => [...prev, info]);
+    };
+    socket.on("nova_mensagem", receberMensagem);
+    socket.emit("entrar_na_sala", { codigo: codigoSala });
+    return () => {
+      socket.off("nova_mensagem", receberMensagem);
+    };
+  }, [codigoSala, setMensagens]);
 
   useEffect(() => {
     if (codigoSala) {
@@ -103,11 +124,21 @@ export default function SalaEspera() {
           ))}
         </div>
         {user && (
-          <button className="mt-10 px-6 py-2 bg-teal-500 hover:bg-teal-600 text-white rounded-xl font-bold">
+          <button
+            className="mt-10 px-6 py-2 bg-teal-500 hover:bg-teal-600 text-white rounded-xl font-bold"
+            onClick={iniciarBusca}
+          >
             Começar votação
           </button>
         )}
       </div>
+      {buscando && (
+        <PopupBuscando
+          mostrar={buscando}
+          participantes={participantes}
+          mensagens={mensagens}
+        />
+      )}
     </PageWrapper>
   );
 }

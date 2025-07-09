@@ -9,13 +9,11 @@ import placeholderImg from "../assets/restaurante.jpg";
 import { api } from "../services/api";
 import { log, error } from "../utils/logger";
 
-
-
-
 export default function ResultadoRole() {
   const [mostrarModalDiga, setMostrarModalDiga] = useState(false);
 
-  const {  sugestaoFinal,
+  const {
+    sugestaoFinal,
     votos,
     setVotos,
     codigoSala,
@@ -23,13 +21,14 @@ export default function ResultadoRole() {
     mensagens,
     setMensagens,
     nomeConvidado,
-    user } = useUser();
+    user,
+  } = useUser();
 
   const sugestao = sugestaoFinal?.sugestao;
   log("🧠 sugestaoFinal:", sugestaoFinal);
 
   const handleEnviarMensagem = (mensagem) => {
-      if (!mensagem) return;
+    if (!mensagem) return;
     socket.emit("enviar_mensagem", {
       codigo: codigoSala,
       nome: nomeConvidado || user?.nome,
@@ -37,7 +36,7 @@ export default function ResultadoRole() {
     });
   };
 
-    useEffect(() => {
+  useEffect(() => {
     const receberVoto = (info) => {
       setVotos((prev) => [...prev, info]);
     };
@@ -51,6 +50,7 @@ export default function ResultadoRole() {
     socket.on("nova_mensagem", receberMensagem);
     return () => {
       socket.off("novo_voto", receberVoto);
+      socket.off("nova_mensagem", receberMensagem);
     };
   }, [codigoSala, setVotos, setMensagens]);
 
@@ -66,7 +66,6 @@ export default function ResultadoRole() {
     };
     obterVotos();
   }, [salaId, setVotos]);
-
 
   return (
     <PageWrapper>
