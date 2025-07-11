@@ -191,7 +191,7 @@ export default function TipoRole() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-4">
           <InputText
             label="Palavras-chave"
-            placeholder="Inserir palavras-chave"
+            placeholder="Ex: Musica ao vivo"
             value={keywords}
             onChange={(e) => setKeywords(e.target.value)}
           />
