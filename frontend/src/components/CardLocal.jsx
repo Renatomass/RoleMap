@@ -6,6 +6,8 @@ import Timer from "./Timer";
 import { useUser } from "../context/UseContext";
 import { api } from "../services/api";
 import { error } from "../utils/logger";
+import placeholderImg from "../assets/restaurante.jpg";
+
 
 
 export default function CardLocal({
@@ -13,7 +15,7 @@ export default function CardLocal({
   descricao = "",
   motivo = "",
   link = "",
-  imagem = "https://source.unsplash.com/400x300/?restaurant",
+  imagem = placeholderImg,
   distancia = "1km",
   nota = 0,
 }) {

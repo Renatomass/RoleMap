@@ -4,14 +4,22 @@ import LogoMarca from "../components/LogoMarca";
 import BtnCriarRole from "../components/BtnCriarRole";
 import BtnConvidado from "../components/BtnConvidado";
 import { useUser } from "../context/UseContext";
+import { useState } from "react";
+import Toast from "../components/Toast";
+
 
 
 export default function UserSala() {
   const navigate = useNavigate();
   const { user, logout } = useUser();
+    const [toastMsg, setToastMsg] = useState("");
+
   const handleLogout = () => {
       logout();
-      navigate("/Home"); 
+      setToastMsg("Logout realizado");
+      setTimeout(() => {
+        navigate("/Home");
+      }, 1000); 
   }
     return (
       <PageWrapper>
@@ -31,6 +39,9 @@ export default function UserSala() {
             Sair da conta
           </button>
         </div>
+        {toastMsg && (
+          <Toast message={toastMsg} onClose={() => setToastMsg("")} />
+        )}
       </PageWrapper>
     );
 }

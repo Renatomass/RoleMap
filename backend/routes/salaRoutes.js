@@ -9,6 +9,8 @@ router.post('/entrar', salaController.entrarComoConvidado);
 router.post("/sugestao", salaController.gerarSugestao);
 router.post("/votar", salaController.votar);
 router.get("/:id/votos", salaController.listarVotos);
+router.post("/enviar-email", salaController.enviarEmail);
+
 
         
 module.exports = router;

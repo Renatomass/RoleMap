@@ -46,7 +46,10 @@ export default function Home() {
         token: token,
       });
 
-      navigate("/UserSala");
+      setToastMsg("Login realizado");
+      setTimeout(() => {
+        navigate("/UserSala");
+      }, 1000);
     } catch (error) {
       error("Erro no login:", error.response?.data || error.message);
       setToastMsg(

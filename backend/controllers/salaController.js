@@ -5,6 +5,8 @@ const { Sala, Preferencia, Convidado, Usuario } = require("../models");
 // const buscarLugares = require("../utils/buscarLugares");
 const obterLugares = require("../utils/obterLugares");
 const logger = require("../utils/logger");
+const nodemailer = require("nodemailer");
+
 
 
 const criarSala = async (req, res) => {
@@ -292,6 +294,37 @@ const listarVotos = async (req, res) => {
   }
 };
 
+const enviarEmail = async (req, res) => {
+  try {
+    const { email, placeName, mapsLink, date, time } = req.body;
+    if (!email || !placeName || !mapsLink || !date || !time) {
+      return res.status(400).json({ erro: "Dados incompletos" });
+    }
+
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: `Convite para ${placeName}`,
+      text: `Convite para ${placeName} em ${date} às ${time}. Veja no mapa: ${mapsLink}`,
+    });
+
+    res.status(200).json({ mensagem: "Email enviado" });
+  } catch (error) {
+    logger.error(error);
+    res
+      .status(500)
+      .json({ erro: "Erro ao enviar email", detalhe: error.message });
+  }
+};
+
 module.exports = {
   criarSala,
   criarRole,
@@ -299,4 +332,5 @@ module.exports = {
   entrarComoConvidado,
   votar,
   listarVotos,
+  enviarEmail,
 };
