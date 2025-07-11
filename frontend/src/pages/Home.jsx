@@ -50,10 +50,10 @@ export default function Home() {
       setTimeout(() => {
         navigate("/UserSala");
       }, 1000);
-    } catch (error) {
-      error("Erro no login:", error.response?.data || error.message);
+     } catch (err) {
+      error("Erro no login:", err.response?.data || err.message);
       setToastMsg(
-        error.response?.data?.erro || "Erro ao fazer login. Tente novamente."
+        err.response?.data?.erro || "Erro ao fazer login. Tente novamente."
       );
     }
   };

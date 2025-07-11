@@ -47,8 +47,8 @@ export default function EntrarSala() {
       } else {
         alert("Código inválido ou sala inexistente");
       }
-    } catch (error) {
-      error("Erro ao entrar na sala:", error);
+    } catch (err) {
+      error("Erro ao entrar na sala:", err);
       setToastMsg("Código inválido ou sala inexistente");
     }
   };

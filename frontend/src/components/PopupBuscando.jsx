@@ -29,10 +29,10 @@ export default function PopupBuscando({ mostrar, participantes = [], mensagens =
           sugestao: response.data,
         });
         navigate("/resultado");
-      } catch (error) {
-        error("❌ Erro ao buscar sugestão:", error);
-      }
-    };
+         } catch (err) {
+          error("❌ Erro ao buscar sugestão:", err);
+        }
+      };
 
     buscarSugestao();
   }, [mostrar, salaId, navigate, setSugestaoFinal]);

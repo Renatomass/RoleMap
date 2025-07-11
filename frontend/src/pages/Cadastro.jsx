@@ -32,12 +32,12 @@ export default function Cadastro() {
         token: token,
       });
       navigate("/UserSala");
-    } catch (error) {
-      error("Erro bruto no cadastro:", error);
+    } catch (err) {
+      error("Erro bruto no cadastro:", err);
 
-      if (error.response) {
-        log("Erro da API:", error.response.data);
-        setToastMsg(error.response.data.erro || "Erro ao cadastrar (API).");
+      if (err.response) {
+        log("Erro da API:", err.response.data);
+        setToastMsg(err.response.data.erro || "Erro ao cadastrar (API).");
       } else {
         setToastMsg("Erro ao cadastrar (sem resposta do servidor).");
       }
