@@ -4,5 +4,7 @@ const usuarioController = require('../controllers/usuarioController');
 
 router.post('/cadastro', usuarioController.cadastrar);
 router.post('/login', usuarioController.login);
+router.get('/confirmar/:token', usuarioController.confirmar);
+
 
 module.exports = router;

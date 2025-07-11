@@ -2,9 +2,12 @@ import { useEffect, useState } from "react";
 import bgImage from "../assets/bg.svg";
 import BtnVoltar from "./BtnVoltar";
 import BtnUser from   "./BtnUser";
+import { useUser } from "../context/UseContext";
 
 export default function PageWrapper({ children }) {
   const [show, setShow] = useState(false);
+    const { user } = useUser();
+
 
   useEffect(() => {
     const timeout = setTimeout(() => setShow(true), 10);
@@ -22,7 +25,8 @@ export default function PageWrapper({ children }) {
       }}
       className="min-h-screen px-4 py-8 text-white flex items-center justify-center font-pdr"
     >
-        <BtnVoltar/><BtnUser/>
+        <BtnVoltar/>
+        {user && <BtnUser/>}
       <div
         className={`
           transition-all duration-500 ease-in-out transform

@@ -21,6 +21,12 @@ module.exports = {
         type: Sequelize.STRING(255),
         allowNull: false
       },
+      
+      verificado: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+      },
       created_at: {
         type: Sequelize.DATE,
         defaultValue: Sequelize.fn('NOW')

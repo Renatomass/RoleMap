@@ -11,7 +11,11 @@ module.exports = (sequelize, DataTypes) => {
   Usuario.init({
     nome: DataTypes.STRING,
     email: DataTypes.STRING,
-    senha_hash: DataTypes.STRING
+    senha_hash: DataTypes.STRING,
+    verificado: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   }, {
     sequelize,
     modelName: 'Usuario',
