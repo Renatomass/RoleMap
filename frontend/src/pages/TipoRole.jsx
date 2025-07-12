@@ -36,7 +36,7 @@ export default function TipoRole() {
   } = useUser();
   const [mostrarPopupLocal, setMostrarPopupLocal] = useState(true);
   const navigate = useNavigate();
-  const nomeHost = user?.name || "Host";
+  const nomeHost = user?.nome || "Host";
 
   const categorias = [img01, img02, img03, img04, img05];
 

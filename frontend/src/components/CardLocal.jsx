@@ -76,6 +76,9 @@ export default function CardLocal({
       <div className="absolute inset-0 bg-gradient-to-b from-[#000000] to-[#0004ff] z-0"></div>
       <img
         src={imagem}
+        onError={(e) => {
+          e.target.src = placeholderImg;
+        }}
         alt={nome}
         className="absolute inset-0 w-full h-full object-cover opacity-40 z-0"
       />

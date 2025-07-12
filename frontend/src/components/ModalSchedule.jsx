@@ -31,11 +31,15 @@ export default function ModalSchedule({ place, onClose }) {
     const start = new Date(`${date}T${time}`);
     const end = new Date(start.getTime() + 60 * 60 * 1000);
     const format = (d) => d.toISOString().replace(/[-:]|\.\d{3}/g, "");
-    const url = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
+    const baseUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
       place?.nome || "Role"
-    )}&dates=${format(start)}/${format(end)}&details=${encodeURIComponent(
+    )}&dates=${format(start)}/${format(end)}&location=${encodeURIComponent(
       mapsLink
     )}`;
+    const description = ""; // Optional description
+    const url = description
+      ? `${baseUrl}&details=${encodeURIComponent(description)}`
+      : baseUrl;
     window.open(url, "_blank");
   };
 

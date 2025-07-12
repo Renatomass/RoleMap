@@ -34,6 +34,7 @@ export default function ResultadoRole() {
       nome: nomeConvidado || user?.nome,
       mensagem,
     });
+    setMostrarModalDiga(false);
   };
 
   useEffect(() => {
@@ -82,7 +83,10 @@ export default function ResultadoRole() {
       <div className="mt-4 text-center">
         <p className="text-2xl font-semibold mb-2">O que você achou?</p>
         <div className="flex flex-row justify-center gap-2 flex-wrap">
-          <button className="px-3 py-1 bg-[#15128598] rounded-full text-sm hover:scale-105 transition cursor-pointer">
+          <button
+            onClick={() => handleEnviarMensagem("Não gostei!")}
+            className="px-3 py-1 bg-[#15128598] rounded-full text-sm hover:scale-105 transition cursor-pointer"
+          >
             🤬 Não gostei!
           </button>
 
@@ -93,7 +97,10 @@ export default function ResultadoRole() {
             💭 Diga algo
           </button>
 
-          <button className="px-3 py-1 bg-[#15128598] rounded-full text-sm hover:scale-105 transition cursor-pointer">
+          <button
+            onClick={() => handleEnviarMensagem("Partiu!")}
+            className="px-3 py-1 bg-[#15128598] rounded-full text-sm hover:scale-105 transition cursor-pointer"
+          >
             😎 Partiu!
           </button>
         </div>

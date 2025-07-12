@@ -102,6 +102,9 @@ export default function ResultadoFinal() {
         <div className="absolute inset-0 bg-gradient-to-b from-[#000000] to-[#0004ff] z-0"></div>
         <img
           src={lugar?.imagem || placeholderImg}
+          onError={(e) => {
+          e.target.src = placeholderImg;
+        }}
           alt="Local escolhido"
           className="absolute inset-0 w-full h-full object-cover opacity-40 z-0"
         />
