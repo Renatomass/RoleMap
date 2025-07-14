@@ -36,7 +36,7 @@ export default function ModalSchedule({ place, onClose }) {
     )}&dates=${format(start)}/${format(end)}&location=${encodeURIComponent(
       mapsLink
     )}`;
-    const description = ""; // Optional description
+    const description = ""; 
     const url = description
       ? `${baseUrl}&details=${encodeURIComponent(description)}`
       : baseUrl;

@@ -7,8 +7,6 @@ import { useUser } from "../context/UseContext";
 import { useState } from "react";
 import Toast from "../components/Toast";
 
-
-
 export default function UserSala() {
   const navigate = useNavigate();
   const { user, logout } = useUser();

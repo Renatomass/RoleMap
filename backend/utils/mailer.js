@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport({
 });
 
 async function enviarEmail(to, subject, text) {
-  if (!process.env.SMTP_HOST) return; // avoid errors if env not set
+  if (!process.env.SMTP_HOST) return;
   await transporter.sendMail({
     from: process.env.SMTP_FROM,
     to,
