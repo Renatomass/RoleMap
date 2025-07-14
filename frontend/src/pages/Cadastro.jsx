@@ -7,6 +7,7 @@ import { useUser } from "../context/UseContext";
 import { api } from "../services/api";
 import { log, error } from "../utils/logger";
 import Toast from "../components/Toast";
+import EmailVerificationPopup from "../components/EmailVerificationPopup";
 
 export default function Cadastro() {
   const navigate = useNavigate();
@@ -14,6 +15,31 @@ export default function Cadastro() {
 
   const [form, setForm] = useState({ nome: "", email: "", senha: "" });
   const [toastMsg, setToastMsg] = useState("");
+  const [mostrarPopup, setMostrarPopup] = useState(false);
+
+  const verificarCodigo = async (codigo) => {
+    try {
+      const resp = await api.post("/usuarios/verificar-codigo", {
+        email: form.email,
+        codigo,
+      });
+      const { usuario, token } = resp.data;
+      setUser({
+        id: usuario.id,
+        nome: usuario.nome,
+        email: usuario.email,
+        token,
+      });
+      navigate("/UserSala");
+    } catch (err) {
+      error("Erro na verificação:", err);
+      if (err.response) {
+        setToastMsg(err.response.data.erro || "Código inválido");
+      } else {
+        setToastMsg("Erro na verificação");
+      }
+    }
+  };
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -22,16 +48,8 @@ export default function Cadastro() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post("/usuarios/cadastro", form);
-      const { usuario, token } = response.data;
-
-      setUser({
-        id: usuario.id,
-        nome: usuario.nome,
-        email: usuario.email,
-        token: token,
-      });
-      navigate("/UserSala");
+      await api.post("/usuarios/cadastro", form);
+      setMostrarPopup(true);
     } catch (err) {
       error("Erro bruto no cadastro:", err);
 
@@ -97,8 +115,14 @@ export default function Cadastro() {
           </button>
         </form>
       </WhiteContainer>
-       {toastMsg && (
+      {toastMsg && (
         <Toast message={toastMsg} onClose={() => setToastMsg('')} />
+      )}
+      {mostrarPopup && (
+        <EmailVerificationPopup
+          onConfirm={verificarCodigo}
+          onClose={() => setMostrarPopup(false)}
+        />
       )}
     </PageWrapper>
   );
