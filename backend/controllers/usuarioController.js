@@ -1,8 +1,11 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { Usuario } = require("../models");
+const { Usuario, UsuarioPendente } = require("../models");
+const { Op } = require("sequelize");
 const logger = require("../utils/logger");
 const enviarEmail = require("../utils/mailer");
+const gerarCodigoVerificacao = require("../utils/gerarCodigoVerificacao");
+
 
 const usuarioController = {
   async cadastrar(req, res) {
@@ -14,12 +17,14 @@ const usuarioController = {
         return res.status(400).json({ erro: "Email já cadastrado." });
       }
 
-      const senha_hash = await bcrypt.hash(senha, 10);
+         const pendenteExistente = await UsuarioPendente.findOne({ where: { email } });
+      if (pendenteExistente) {
+        return res.status(400).json({ erro: "Já há um cadastro pendente para este email." });
+      }
 
-      const novoUsuario = await Usuario.create({
-        nome,
-        email,
-        senha_hash,
+       // Limpa registros expirados
+      await UsuarioPendente.destroy({
+        where: { expires_at: { [Op.lt]: new Date() } },
       });
 
       const token = jwt.sign(
@@ -32,32 +37,23 @@ const usuarioController = {
         { expiresIn: "2h" }
       );
 
-      const verificationToken = jwt.sign(
-        { id: novoUsuario.id },
-        process.env.JWT_SECRET,
-        { expiresIn: "1d" }
-      );
-      const link = `${process.env.SERVER_URL || "http://localhost"}:${
-        process.env.SERVER_PORT || 3001
-      }/usuarios/confirmar/${verificationToken}`;
+      const senha_hash = await bcrypt.hash(senha, 10);
+      const codigo = gerarCodigoVerificacao();
+      const expires_at = new Date(Date.now() + 60 * 60 * 1000); // 1h
+
+      await UsuarioPendente.create({ nome, email, senha_hash, codigo, expires_at });
+
       try {
         await enviarEmail(
-          novoUsuario.email,
-          "Confirmação de cadastro",
-          `Clique no link para confirmar seu cadastro: ${link}`
+         email,
+          "Código de verificação",
+          `Seu código de verificação é: ${codigo}`
         );
       } catch (e) {
-        logger.error("Erro ao enviar email de confirmação:", e);
+        logger.error("Erro ao enviar email de verificação:", e);
       }
+      res.status(201).json({ mensagem: "Código enviado" });
 
-      res.status(201).json({
-        usuario: {
-          id: novoUsuario.id,
-          nome: novoUsuario.nome,
-          email: novoUsuario.email,
-        },
-        token: token,
-      });
     } catch (error) {
       logger.error("Erro no cadastro:", error);
       logger.log("🔥 error.response:", error.response);
@@ -98,6 +94,46 @@ const usuarioController = {
     }
   },
   
+  
+  async confirmarCodigo(req, res) {
+    try {
+      const { email, codigo } = req.body;
+
+      const pendente = await UsuarioPendente.findOne({ where: { email, codigo } });
+      if (!pendente || pendente.expires_at < new Date()) {
+        return res.status(400).json({ erro: "Código inválido" });
+      }
+
+      const novoUsuario = await Usuario.create({
+        nome: pendente.nome,
+        email: pendente.email,
+        senha_hash: pendente.senha_hash,
+        verificado: true,
+      });
+
+      await pendente.destroy();
+
+      const token = jwt.sign(
+        { id: novoUsuario.id, nome: novoUsuario.nome, email: novoUsuario.email },
+        process.env.JWT_SECRET,
+        { expiresIn: "2h" }
+      );
+
+      res.json({
+        usuario: {
+          id: novoUsuario.id,
+          nome: novoUsuario.nome,
+          email: novoUsuario.email,
+        },
+        token,
+      });
+    } catch (error) {
+      logger.error("Erro ao confirmar código:", error);
+      res.status(500).json({ erro: "Erro ao confirmar código" });
+    }
+  },
+  
+
   async confirmar(req, res) {
     try {
       const { token } = req.params;
